@@ -4,6 +4,8 @@
 # You should change these to fit your system.
 #
 
+# TODO: Just for historic interest. To be removed
+
 CC = cc
 C++ = CC
 
