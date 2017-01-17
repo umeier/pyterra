@@ -1,15 +1,20 @@
 include_directories(${terra_SOURCE_DIR}/include/terra)
-set(SOURCE_FILES
-        terra.cpp
+set(LIB_SOURCE_FILES
         Quadedge.cpp
         Subdivision.cpp
         Map.cpp
         Mask.cpp
-        cmdline.cpp
         GreedyInsert.cpp
         Heap.cpp
         greedy.cpp
+        )
+
+set (EXEC_SOURCE_FILES
+        terra.cpp
+        cmdline.cpp
         output.cpp
         )
 
-add_executable(terra ${SOURCE_FILES})
+add_library(terralib SHARED ${LIB_SOURCE_FILES})
+add_executable(terra ${EXEC_SOURCE_FILES})
+target_link_libraries(terra terralib)
