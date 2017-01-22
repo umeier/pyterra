@@ -4,9 +4,7 @@
 #include "gui.h"
 
 
-
-main(int argc, char **argv)
-{
+main(int argc, char **argv) {
     glutInit(&argc, argv);
     process_cmdline(argc, argv);
 

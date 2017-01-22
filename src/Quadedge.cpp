@@ -6,15 +6,13 @@
 
 using namespace std;
 
-Edge::Edge(const Edge&)
-{
+Edge::Edge(const Edge &) {
     cerr << "Edge: Edge assignments are forbidden." << endl;
     exit(1);
 }
 
 
-Edge::Edge(Edge *prev)
-{
+Edge::Edge(Edge *prev) {
     qprev = prev;
     prev->qnext = this;
 
@@ -22,8 +20,7 @@ Edge::Edge(Edge *prev)
     token = 0;
 }
 
-Edge::Edge()
-{
+Edge::Edge() {
     Edge *e0 = this;
     Edge *e1 = new Edge(e0);
     Edge *e2 = new Edge(e1);
@@ -41,37 +38,34 @@ Edge::Edge()
     token = 0;
 }
 
-Edge::~Edge()
-{
-    if( qnext )
-    {
-	Edge *e1 = qnext;
-	Edge *e2 = qnext->qnext;
-	Edge *e3 = qprev;
+Edge::~Edge() {
+    if (qnext) {
+        Edge *e1 = qnext;
+        Edge *e2 = qnext->qnext;
+        Edge *e3 = qprev;
 
 #ifdef SAFETY
-	qnext = NULL;
+        qnext = NULL;
 
-	token = -69;
-	e1->token = -69;
-	e2->token = -69;
-	e3->token = -69;
+        token = -69;
+        e1->token = -69;
+        e2->token = -69;
+        e3->token = -69;
 #endif
-	e1->qnext = NULL;
-	e2->qnext = NULL;
-	e3->qnext = NULL;
+        e1->qnext = NULL;
+        e2->qnext = NULL;
+        e3->qnext = NULL;
 
-	delete e1;
-	delete e2;
-	delete e3;
+        delete e1;
+        delete e2;
+        delete e3;
     }
 }
 
 
-void splice(Edge *a, Edge *b)
-{
+void splice(Edge *a, Edge *b) {
     Edge *alpha = a->Onext()->Rot();
-    Edge *beta  = b->Onext()->Rot();
+    Edge *beta = b->Onext()->Rot();
 
     Edge *t1 = b->Onext();
     Edge *t2 = a->Onext();

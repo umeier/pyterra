@@ -4,8 +4,7 @@
 
 using namespace std;
 
-void Heap::swap(int i,int j)
-{
+void Heap::swap(int i, int j) {
     heap_node tmp = ref(i);
 
     ref(i) = ref(j);
@@ -15,41 +14,36 @@ void Heap::swap(int i,int j)
     ref(j).obj->token = j;
 }
 
-void Heap::upheap(int i)
-{
-    if( i==0 ) return;
+void Heap::upheap(int i) {
+    if (i == 0) return;
 
-    if( ref(i).import > ref(parent(i)).import ) {
-        swap(i,parent(i));
+    if (ref(i).import > ref(parent(i)).import) {
+        swap(i, parent(i));
         upheap(parent(i));
     }
 }
 
-void Heap::downheap(int i)
-{
-    if (i>=size) return;        // perhaps just extracted the last
+void Heap::downheap(int i) {
+    if (i >= size) return;        // perhaps just extracted the last
 
     int largest = i,
-        l = left(i),
-        r = right(i);
+            l = left(i),
+            r = right(i);
 
-    if( l<size && ref(l).import > ref(largest).import ) largest = l;
-    if( r<size && ref(r).import > ref(largest).import ) largest = r;
+    if (l < size && ref(l).import > ref(largest).import) largest = l;
+    if (r < size && ref(r).import > ref(largest).import) largest = r;
 
-    if( largest != i ) {
-        swap(i,largest);
+    if (largest != i) {
+        swap(i, largest);
         downheap(largest);
     }
 }
 
-
 
-void Heap::insert(Labelled *t,real v)
-{
-    if( size == maxLength() )
-    {
-	cerr << "NOTE: Growing heap from " << size << " to " << 2*size << endl;
-	resize(2*size);
+void Heap::insert(Labelled *t, real v) {
+    if (size == maxLength()) {
+        cerr << "NOTE: Growing heap from " << size << " to " << 2 * size << endl;
+        resize(2 * size);
     }
 
     int i = size++;
@@ -62,37 +56,31 @@ void Heap::insert(Labelled *t,real v)
     upheap(i);
 }
 
-void Heap::update(Labelled *t,real v)
-{
+void Heap::update(Labelled *t, real v) {
     int i = t->token;
 
-    if( i >= size )
-    {
-	cerr << "WARNING: Attempting to update past end of heap!" << endl;
-	return;
-    }
-    else if( i == NOT_IN_HEAP )
-    {
-	cerr << "WARNING: Attempting to update object not in heap!" << endl;
-	return;
+    if (i >= size) {
+        cerr << "WARNING: Attempting to update past end of heap!" << endl;
+        return;
+    } else if (i == NOT_IN_HEAP) {
+        cerr << "WARNING: Attempting to update object not in heap!" << endl;
+        return;
     }
 
-    real old=ref(i).import;
+    real old = ref(i).import;
     ref(i).import = v;
 
-    if( v<old )
+    if (v < old)
         downheap(i);
     else
         upheap(i);
 }
 
 
+heap_node *Heap::extract() {
+    if (size < 1) return 0;
 
-heap_node *Heap::extract()
-{
-    if( size<1 ) return 0;
-
-    swap(0,size-1);
+    swap(0, size - 1);
     size--;
 
     downheap(0);
@@ -102,19 +90,18 @@ heap_node *Heap::extract()
     return &ref(size);
 }
 
-heap_node *Heap::kill(int i)
-{
-    if( i>=size )
-	cerr << "WARNING: Attempt to delete invalid heap node." << endl;
+heap_node *Heap::kill(int i) {
+    if (i >= size)
+        cerr << "WARNING: Attempt to delete invalid heap node." << endl;
 
-    swap(i, size-1);
+    swap(i, size - 1);
     size--;
     ref(size).obj->token = NOT_IN_HEAP;
 
-    if( ref(i).import < ref(size).import )
-	downheap(i);
+    if (ref(i).import < ref(size).import)
+        downheap(i);
     else
-	upheap(i);
+        upheap(i);
 
 
     return &ref(size);
