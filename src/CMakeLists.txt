@@ -20,6 +20,7 @@ set (EXEC_SOURCE_FILES
         output.cpp
         )
 
-add_library(terralib SHARED ${LIB_SOURCE_FILES})
-add_executable(terra ${EXEC_SOURCE_FILES})
-target_link_libraries(terra terralib)
+add_library(terra SHARED ${LIB_SOURCE_FILES})
+add_executable(terra-bin ${EXEC_SOURCE_FILES})
+target_link_libraries(terra-bin terra)
+SET_TARGET_PROPERTIES(terra-bin PROPERTIES OUTPUT_NAME terra)
