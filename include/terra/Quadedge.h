@@ -1,5 +1,5 @@
-#ifndef QUADEDGE_INCLUDED // -*- C++ -*-
-#define QUADEDGE_INCLUDED
+#ifndef TERRA_QUADEDGE_H // -*- C++ -*-
+#define TERRA_QUADEDGE_H
 
 #include "Geom.h"
 

@@ -1,5 +1,5 @@
-#ifndef ARRAY_INCLUDED // -*- C++ -*-
-#define ARRAY_INCLUDED
+#ifndef TERRA_ARRAY_H // -*- C++ -*-
+#define TERRA_ARRAY_H
 
 #include <string.h>
 
@@ -63,10 +63,6 @@ inline void array<T>::free() {
 
 template<class T>
 inline T &array<T>::ref(int i) {
-#ifdef SAFETY
-    assert( data );
-    assert( i>=0 && i<len );
-#endif
     return data[i];
 }
 
@@ -125,11 +121,6 @@ inline void array2<T>::free() {
 
 template<class T>
 inline T &array2<T>::ref(int i, int j) {
-#ifdef SAFETY
-    assert( data );
-    assert( i>=0 && i<w );
-    assert( j>=0 && j<h );
-#endif
     return data[j * w + i];
 }
 

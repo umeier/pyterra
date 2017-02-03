@@ -49,14 +49,6 @@ Edge::~Edge()
 	Edge *e2 = qnext->qnext;
 	Edge *e3 = qprev;
 
-#ifdef SAFETY
-	qnext = NULL;
-
-	token = -69;
-	e1->token = -69;
-	e2->token = -69;
-	e3->token = -69;
-#endif
 	e1->qnext = NULL;
 	e2->qnext = NULL;
 	e3->qnext = NULL;

@@ -1,5 +1,5 @@
-#ifndef VEC3_INCLUDED // -*- C++ -*-
-#define VEC3_INCLUDED
+#ifndef TERRA_VEC3_H // -*- C++ -*-
+#define TERRA_VEC3_H
 
 class Vec3 {
 protected:

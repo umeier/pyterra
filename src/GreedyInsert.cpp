@@ -165,9 +165,6 @@ void GreedySubdivision::scanTriangle(TrackedTriangle &T) {
         if (T.token != NOT_IN_HEAP)
             heap->kill(T.token);
 
-#ifdef SAFETY
-        T.setCandidate(-69, -69, 0.0);
-#endif
     } else {
         assert(!is_used(candidate.x, candidate.y));
 

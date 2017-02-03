@@ -1,5 +1,5 @@
-#ifndef HEAP_INCLUDED // -*- C++ -*-
-#define HEAP_INCLUDED
+#ifndef TERRA_HEAP_H // -*- C++ -*-
+#define TERRA_HEAP_H
 
 #include "Geom.h"
 #include "Array.h"

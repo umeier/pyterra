@@ -1,5 +1,5 @@
-#ifndef SUBDIVISION_INCLUDED // -*- C++ -*-
-#define SUBDIVISION_INCLUDED
+#ifndef TERRA_SUBDIVISION_H // -*- C++ -*-
+#define TERRA_SUBDIVISION_H
 
 #include "Quadedge.h"
 
