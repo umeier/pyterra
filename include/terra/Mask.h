@@ -32,7 +32,7 @@ inline RealMask::RealMask(int w, int h)
 {
     width = w;
     height = h;
-    data = (real *)calloc(w*h, sizeof(real));
+    data = (real *)calloc((size_t) (w * h), sizeof(real));
 }
 
 inline real& RealMask::ref(int i, int j)

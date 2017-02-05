@@ -22,8 +22,8 @@ enum Side {
 };
 
 #include <math.h>
-#include "Vec2.h"
-#include "Vec3.h"
+#include "Vertex2.h"
+#include "Vertex3.h"
 
 #ifndef NULL
 #define NULL 0
@@ -51,27 +51,27 @@ public:
 //
 // triArea returns TWICE the area of the oriented triangle ABC.
 // The area is positive when ABC is oriented counterclockwise.
-inline real triArea(const Vec2 &a, const Vec2 &b, const Vec2 &c) {
+inline real triArea(const Vertex2 &a, const Vertex2 &b, const Vertex2 &c) {
     return (b[X] - a[X]) * (c[Y] - a[Y]) - (b[Y] - a[Y]) * (c[X] - a[X]);
 }
 
-inline boolean ccw(const Vec2 &a, const Vec2 &b, const Vec2 &c) {
+inline boolean ccw(const Vertex2 &a, const Vertex2 &b, const Vertex2 &c) {
     return triArea(a, b, c) > 0;
 }
 
-inline boolean rightOf(const Vec2 &x, const Vec2 &org, const Vec2 &dest) {
+inline boolean rightOf(const Vertex2 &x, const Vertex2 &org, const Vertex2 &dest) {
     return ccw(x, dest, org);
 }
 
-inline boolean leftOf(const Vec2 &x, const Vec2 &org, const Vec2 &dest) {
+inline boolean leftOf(const Vertex2 &x, const Vertex2 &org, const Vertex2 &dest) {
     return ccw(x, org, dest);
 }
 
 // Returns True if the point d is inside the circle defined by the
 // points a, b, c. See Guibas and Stolfi (1985) p.107.
 //
-inline boolean inCircle(const Vec2 &a, const Vec2 &b, const Vec2 &c,
-                        const Vec2 &d) {
+inline boolean inCircle(const Vertex2 &a, const Vertex2 &b, const Vertex2 &c,
+                        const Vertex2 &d) {
     return (a[0] * a[0] + a[1] * a[1]) * triArea(b, c, d) -
            (b[0] * b[0] + b[1] * b[1]) * triArea(a, c, d) +
            (c[0] * c[0] + c[1] * c[1]) * triArea(a, b, d) -
@@ -86,16 +86,16 @@ public:
 
     Plane() {}
 
-    Plane(const Vec3 &p, const Vec3 &q, const Vec3 &r) { init(p, q, r); }
+    Plane(const Vertex3 &p, const Vertex3 &q, const Vertex3 &r) { init(p, q, r); }
 
-    inline void init(const Vec3 &p, const Vec3 &q, const Vec3 &r);
+    inline void init(const Vertex3 &p, const Vertex3 &q, const Vertex3 &r);
 
     real operator()(real x, real y) { return a * x + b * y + c; }
 
     real operator()(int x, int y) { return a * x + b * y + c; }
 };
 
-inline void Plane::init(const Vec3 &p, const Vec3 &q, const Vec3 &r)
+inline void Plane::init(const Vertex3 &p, const Vertex3 &q, const Vertex3 &r)
 // find the plane z=ax+by+c passing through three points p,q,r
 {
     // We explicitly declare these (rather than putting them in a
@@ -116,19 +116,19 @@ private:
     real a, b, c;
 
 public:
-    Line(const Vec2 &p, const Vec2 &q) {
-        Vec2 t = q - p;
+    Line(const Vertex2 &p, const Vertex2 &q) {
+        Vertex2 t = q - p;
         real l = t.length();
         a = t[Y] / l;
         b = -t[X] / l;
         c = -(a * p[X] + b * p[Y]);
     }
 
-    inline real eval(const Vec2 &p) const {
+    inline real eval(const Vertex2 &p) const {
         return (a * p[X] + b * p[Y] + c);
     }
 
-    inline Side classify(const Vec2 &p) const {
+    inline Side classify(const Vertex2 &p) const {
         real d = eval(p);
 
         if (d < -EPS)
@@ -139,13 +139,13 @@ public:
             return On;
     }
 
-    inline Vec2 intersect(const Line &l) const {
-        Vec2 p;
+    inline Vertex2 intersect(const Line &l) const {
+        Vertex2 p;
         intersect(l, p);
         return p;
     }
 
-    inline void intersect(const Line &l, Vec2 &p) const {
+    inline void intersect(const Line &l, Vertex2 &p) const {
         real den = a * l.b - b * l.a;
         p[X] = (b * l.c - c * l.b) / den;
         p[Y] = (c * l.a - a * l.c) / den;

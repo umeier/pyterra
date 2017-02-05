@@ -50,9 +50,9 @@ static void obj_face(Triangle &T, void *closure) {
     ostream &out = *output_stream;
     array2<int> &vert_id = *(array2<int> *) closure;
 
-    const Vec2 &p1 = T.point1();
-    const Vec2 &p2 = T.point2();
-    const Vec2 &p3 = T.point3();
+    const Vertex2 &p1 = T.point1();
+    const Vertex2 &p2 = T.point2();
+    const Vertex2 &p3 = T.point3();
 
     out << "f ";
     out << vert_id((int) p1[X], (int) p1[Y]) << " ";
@@ -88,9 +88,9 @@ void output_obj(ostream &out) {
 static void tin_face(Triangle &T, void *) {
     ostream &out = *output_stream;
 
-    const Vec2 &p1 = T.point1();
-    const Vec2 &p2 = T.point2();
-    const Vec2 &p3 = T.point3();
+    const Vertex2 &p1 = T.point1();
+    const Vertex2 &p2 = T.point2();
+    const Vertex2 &p3 = T.point3();
 
     out << "t ";
 
@@ -127,8 +127,8 @@ static void eps_prologue(ostream &out) {
 static void ps_edge(Edge *e, void *) {
     ostream &out = *output_stream;
 
-    const Vec2 &a = e->Org();
-    const Vec2 &b = e->Dest();
+    const Vertex2 &a = e->Org();
+    const Vertex2 &b = e->Dest();
 
     out << a[X] << " " << a[Y] << " "
         << b[X] << " " << b[Y]
