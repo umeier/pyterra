@@ -37,13 +37,13 @@ void subsample_insertion(int target_width) {
 
     // 'i' is the target width and 'j' is the target height
 
-    real i = (real) target_width;
-    real j = rint((i * height) / width);
+    double i = (double) target_width;
+    double j = rint((i * height) / width);
 
-    real dx = (width - 1) / (i - 1);
-    real dy = (height - 1) / (j - 1);
+    double dx = (width - 1) / (i - 1);
+    double dy = (height - 1) / (j - 1);
 
-    real u, v;
+    double u, v;
     int x, y;
     for (u = 0; u < i; u++)
         for (v = 0; v < j; v++) {

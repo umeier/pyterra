@@ -1,7 +1,7 @@
 #ifndef TERRA_ARRAY_H // -*- C++ -*-
 #define TERRA_ARRAY_H
 
-#include <string.h>
+#include <cstring>
 
 //
 // Array classes

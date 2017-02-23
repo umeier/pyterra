@@ -1,19 +1,19 @@
-#include <stdlib.h>
+#include <cstdlib>
 #include <fstream>
-#include <string.h>
+#include <cstring>
 #include <getopt.h>
 #include "terra.h"
 
-GreedySubdivision *mesh;
+Mesh *mesh;
 Map *DEM;
 
 static ImportMask default_mask;
 ImportMask *MASK;
 
 
-real error_threshold = 0.0;
+double error_threshold = 0.0;
 int point_limit = -1;
-real height_scale = 1.0;
+double height_scale = 1.0;
 FileFormat output_format;
 char *output_filename = NULL;
 char *mask_filename = NULL;
@@ -145,7 +145,7 @@ void process_cmdline(int argc, char **argv) {
     }
 
 
-    mesh = new GreedySubdivision(DEM);
+    mesh = new Mesh(DEM);
 
 
     ////////////////////////////////////////////////////////////////

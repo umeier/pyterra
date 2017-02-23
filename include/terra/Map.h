@@ -1,7 +1,7 @@
 #ifndef TERRA_MAP_H // -*- C++ -*-
 #define TERRA_MAP_H
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <iostream>
 
 #include "Geom.h"
@@ -15,15 +15,15 @@ public:
     int height;
     int depth;  // in bits
 
-    real min, max;
+    double min, max;
 
-    real operator()(int i, int j) { return eval(i, j); }
+    double operator()(int i, int j) { return eval(i, j); }
 
-    real operator()(real i, real j) { return eval((int) i, (int) j); }
+    double operator()(double i, double j) { return eval((int) i, (int) j); }
 
-    real eval(real i, real j) { return eval((int) i, (int) j); }
+    double eval(double i, double j) { return eval((int) i, (int) j); }
 
-    virtual real eval(int i, int j) = 0;
+    virtual double eval(int i, int j) = 0;
 
     virtual void rawRead(istream &) = 0;
 
@@ -51,7 +51,7 @@ public:
 
     DirectMap(int width, int height);
 
-    real eval(int i, int j) { return (real) ref(i, j); }
+    double eval(int i, int j) { return (double) ref(i, j); }
 
     void *getBlock() { return data; }
 
@@ -63,7 +63,7 @@ public:
 typedef DirectMap<unsigned char> ByteMap;
 typedef DirectMap<unsigned short> ShortMap;
 typedef DirectMap<unsigned int> WordMap;
-typedef DirectMap<real> RealMap;
+typedef DirectMap<double> doubleMap;
 
 
 template<class T>
@@ -91,7 +91,7 @@ template<class T>
 void DirectMap<T>::textRead(istream &in) {
     for (int j = 0; j < height; j++)
         for (int i = 0; i < width; i++) {
-            real val;
+            double val;
             in >> val;
             ref(i, j) = (T) val;
         }

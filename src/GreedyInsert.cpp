@@ -7,12 +7,12 @@
 extern ImportMask *MASK;
 
 void TrackedTriangle::update(Subdivision &s) {
-    GreedySubdivision &gs = (GreedySubdivision &) s;
+    Mesh &gs = (Mesh &) s;
     gs.scanTriangle(*this);
 }
 
 
-GreedySubdivision::GreedySubdivision(Map *map) {
+Mesh::Mesh(Map *map) {
     H = map;
     heap = new Heap(128);
 
@@ -26,10 +26,10 @@ GreedySubdivision::GreedySubdivision(Map *map) {
             is_used(x, y) = DATA_POINT_UNUSED;
 
 
-    initMesh(Vertex2(0, 0),
-             Vertex2(0, h - 1),
-             Vertex2(w - 1, h - 1),
-             Vertex2(w - 1, 0));
+    initMesh(Vertex(0, 0),
+             Vertex(0, h - 1),
+             Vertex(w - 1, h - 1),
+             Vertex(w - 1, 0));
 
     is_used(0, 0) = DATA_POINT_USED;
     is_used(0, h - 1) = DATA_POINT_USED;
@@ -40,7 +40,7 @@ GreedySubdivision::GreedySubdivision(Map *map) {
 }
 
 
-Triangle *GreedySubdivision::allocFace(Edge *e) {
+Triangle *Mesh::allocFace(Edge *e) {
     Triangle *t = new TrackedTriangle(e);
 
     heap->insert(t, -1.0);
@@ -49,16 +49,16 @@ Triangle *GreedySubdivision::allocFace(Edge *e) {
 }
 
 
-void GreedySubdivision::compute_plane(Plane &plane,
-                                      Triangle &T,
-                                      Map &map) {
-    const Vertex2 &p1 = T.point1();
-    const Vertex2 &p2 = T.point2();
-    const Vertex2 &p3 = T.point3();
+void Mesh::compute_plane(Plane &plane,
+                         Triangle &T,
+                         Map &map) {
+    const Vertex &p1 = T.point1();
+    const Vertex &p2 = T.point2();
+    const Vertex &p3 = T.point3();
 
-    Vertex3 v1(p1, map(p1[X], p1[Y]));
-    Vertex3 v2(p2, map(p2[X], p2[Y]));
-    Vertex3 v3(p3, map(p3[X], p3[Y]));
+    Vec3 v1(p1, map(p1[X], p1[Y]));
+    Vec3 v2(p2, map(p2[X], p2[Y]));
+    Vec3 v3(p3, map(p3[X], p3[Y]));
 
     plane.init(v1, v2, v3);
 }
@@ -69,36 +69,36 @@ void GreedySubdivision::compute_plane(Plane &plane,
 // It should be replaced
 //
 static int vec2_y_compar(const void *a, const void *b) {
-    Vertex2 &p1 = *(Vertex2 *) a,
-            &p2 = *(Vertex2 *) b;
+    Vertex &p1 = *(Vertex *) a,
+            &p2 = *(Vertex *) b;
 
     return (p1[Y] == p2[Y]) ? 0 : (p1[Y] < p2[Y] ? -1 : 1);
 }
 
-static void order_triangle_points(Vertex2 *by_y,
-                                  const Vertex2 &p1,
-                                  const Vertex2 &p2,
-                                  const Vertex2 &p3) {
+static void order_triangle_points(Vertex *by_y,
+                                  const Vertex &p1,
+                                  const Vertex &p2,
+                                  const Vertex &p3) {
     by_y[0] = p1;
     by_y[1] = p2;
     by_y[2] = p3;
 
-    qsort(by_y, 3, sizeof(Vertex2), vec2_y_compar);
+    qsort(by_y, 3, sizeof(Vertex), vec2_y_compar);
 }
 
 
-void GreedySubdivision::scan_triangle_line(Plane &plane,
-                                           int y,
-                                           real x1, real x2,
-                                           Candidate &candidate) {
+void Mesh::scan_triangle_line(Plane &plane,
+                              int y,
+                              double x1, double x2,
+                              Candidate &candidate) {
     int startx = (int) ceil(MIN(x1, x2));
     int endx = (int) floor(MAX(x1, x2));
 
     if (startx > endx) return;
 
-    real z0 = plane(startx, y);
-    real dz = plane.a;
-    real z, diff;
+    double z0 = plane(startx, y);
+    double dz = plane.a;
+    double z, diff;
 
     for (int x = startx; x <= endx; x++) {
         if (!is_used(x, y)) {
@@ -113,26 +113,26 @@ void GreedySubdivision::scan_triangle_line(Plane &plane,
 }
 
 
-void GreedySubdivision::scanTriangle(TrackedTriangle &T) {
+void Mesh::scanTriangle(TrackedTriangle &T) {
     Plane z_plane;
     compute_plane(z_plane, T, *H);
 
-    Vertex2 by_y[3];
+    Vertex by_y[3];
     order_triangle_points(by_y, T.point1(), T.point2(), T.point3());
-    Vertex2 &v0 = by_y[0];
-    Vertex2 &v1 = by_y[1];
-    Vertex2 &v2 = by_y[2];
+    Vertex &v0 = by_y[0];
+    Vertex &v1 = by_y[1];
+    Vertex &v2 = by_y[2];
 
 
     int y;
     int starty, endy;
     Candidate candidate;
 
-    real dx1 = (v1[X] - v0[X]) / (v1[Y] - v0[Y]);
-    real dx2 = (v2[X] - v0[X]) / (v2[Y] - v0[Y]);
+    double dx1 = (v1[X] - v0[X]) / (v1[Y] - v0[Y]);
+    double dx2 = (v2[X] - v0[X]) / (v2[Y] - v0[Y]);
 
-    real x1 = v0[X];
-    real x2 = v0[X];
+    double x1 = v0[X];
+    double x2 = v0[X];
 
     starty = (int) v0[Y];
     endy = (int) v1[Y];
@@ -176,7 +176,7 @@ void GreedySubdivision::scanTriangle(TrackedTriangle &T) {
     }
 }
 
-Edge *GreedySubdivision::select(int sx, int sy, Triangle *t) {
+Edge *Mesh::select(int sx, int sy, Triangle *t) {
     if (is_used(sx, sy)) {
         cerr << "   WARNING: Tried to reinsert point: " << sx << " " << sy << endl;
         return NULL;
@@ -184,12 +184,12 @@ Edge *GreedySubdivision::select(int sx, int sy, Triangle *t) {
 
     is_used(sx, sy) = DATA_POINT_USED;
     count++;
-    Vertex2 v = Vertex2(sx, sy);
+    Vertex v = Vertex(sx, sy);
     return insert(v, t);
 }
 
 
-int GreedySubdivision::greedyInsert() {
+int Mesh::greedyInsert() {
     heap_node *node = heap->extract();
 
     if (!node) return False;
@@ -203,7 +203,7 @@ int GreedySubdivision::greedyInsert() {
     return True;
 }
 
-real GreedySubdivision::maxError() {
+double Mesh::maxError() {
     heap_node *node = heap->top();
 
     if (!node)
@@ -212,15 +212,15 @@ real GreedySubdivision::maxError() {
     return node->import;
 }
 
-real GreedySubdivision::rmsError() {
-    real err = 0.0;
+double Mesh::rmsError() {
+    double err = 0.0;
     int width = H->width;
     int height = H->height;
 
 
     for (int i = 0; i < width; i++)
         for (int j = 0; j < height; j++) {
-            real diff = eval(i, j) - H->eval(i, j);
+            double diff = eval(i, j) - H->eval(i, j);
             err += diff * diff;
         }
 
@@ -228,8 +228,8 @@ real GreedySubdivision::rmsError() {
 }
 
 
-real GreedySubdivision::eval(int x, int y) {
-    Vertex2 p(x, y);
+double Mesh::eval(int x, int y) {
+    Vertex p(x, y);
     Triangle *T = locate(p)->Lface();
 
     Plane z_plane;
