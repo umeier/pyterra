@@ -26,10 +26,10 @@ GreedySubdivision::GreedySubdivision(Map *map) {
             is_used(x, y) = DATA_POINT_UNUSED;
 
 
-    initMesh(Vec2(0, 0),
-             Vec2(0, h - 1),
-             Vec2(w - 1, h - 1),
-             Vec2(w - 1, 0));
+    initMesh(Vertex2(0, 0),
+             Vertex2(0, h - 1),
+             Vertex2(w - 1, h - 1),
+             Vertex2(w - 1, 0));
 
     is_used(0, 0) = DATA_POINT_USED;
     is_used(0, h - 1) = DATA_POINT_USED;
@@ -52,13 +52,13 @@ Triangle *GreedySubdivision::allocFace(Edge *e) {
 void GreedySubdivision::compute_plane(Plane &plane,
                                       Triangle &T,
                                       Map &map) {
-    const Vec2 &p1 = T.point1();
-    const Vec2 &p2 = T.point2();
-    const Vec2 &p3 = T.point3();
+    const Vertex2 &p1 = T.point1();
+    const Vertex2 &p2 = T.point2();
+    const Vertex2 &p3 = T.point3();
 
-    Vec3 v1(p1, map(p1[X], p1[Y]));
-    Vec3 v2(p2, map(p2[X], p2[Y]));
-    Vec3 v3(p3, map(p3[X], p3[Y]));
+    Vertex3 v1(p1, map(p1[X], p1[Y]));
+    Vertex3 v2(p2, map(p2[X], p2[Y]));
+    Vertex3 v3(p3, map(p3[X], p3[Y]));
 
     plane.init(v1, v2, v3);
 }
@@ -69,21 +69,21 @@ void GreedySubdivision::compute_plane(Plane &plane,
 // It should be replaced
 //
 static int vec2_y_compar(const void *a, const void *b) {
-    Vec2 &p1 = *(Vec2 *) a,
-            &p2 = *(Vec2 *) b;
+    Vertex2 &p1 = *(Vertex2 *) a,
+            &p2 = *(Vertex2 *) b;
 
     return (p1[Y] == p2[Y]) ? 0 : (p1[Y] < p2[Y] ? -1 : 1);
 }
 
-static void order_triangle_points(Vec2 *by_y,
-                                  const Vec2 &p1,
-                                  const Vec2 &p2,
-                                  const Vec2 &p3) {
+static void order_triangle_points(Vertex2 *by_y,
+                                  const Vertex2 &p1,
+                                  const Vertex2 &p2,
+                                  const Vertex2 &p3) {
     by_y[0] = p1;
     by_y[1] = p2;
     by_y[2] = p3;
 
-    qsort(by_y, 3, sizeof(Vec2), vec2_y_compar);
+    qsort(by_y, 3, sizeof(Vertex2), vec2_y_compar);
 }
 
 
@@ -117,11 +117,11 @@ void GreedySubdivision::scanTriangle(TrackedTriangle &T) {
     Plane z_plane;
     compute_plane(z_plane, T, *H);
 
-    Vec2 by_y[3];
+    Vertex2 by_y[3];
     order_triangle_points(by_y, T.point1(), T.point2(), T.point3());
-    Vec2 &v0 = by_y[0];
-    Vec2 &v1 = by_y[1];
-    Vec2 &v2 = by_y[2];
+    Vertex2 &v0 = by_y[0];
+    Vertex2 &v1 = by_y[1];
+    Vertex2 &v2 = by_y[2];
 
 
     int y;
@@ -165,9 +165,6 @@ void GreedySubdivision::scanTriangle(TrackedTriangle &T) {
         if (T.token != NOT_IN_HEAP)
             heap->kill(T.token);
 
-#ifdef SAFETY
-        T.setCandidate(-69, -69, 0.0);
-#endif
     } else {
         assert(!is_used(candidate.x, candidate.y));
 
@@ -187,7 +184,7 @@ Edge *GreedySubdivision::select(int sx, int sy, Triangle *t) {
 
     is_used(sx, sy) = DATA_POINT_USED;
     count++;
-    Vec2 v = Vec2(sx, sy);
+    Vertex2 v = Vertex2(sx, sy);
     return insert(v, t);
 }
 
@@ -232,7 +229,7 @@ real GreedySubdivision::rmsError() {
 
 
 real GreedySubdivision::eval(int x, int y) {
-    Vec2 p(x, y);
+    Vertex2 p(x, y);
     Triangle *T = locate(p)->Lface();
 
     Plane z_plane;

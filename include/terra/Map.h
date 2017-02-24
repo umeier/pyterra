@@ -1,5 +1,5 @@
-#ifndef MAP_INCLUDED // -*- C++ -*-
-#define MAP_INCLUDED
+#ifndef TERRA_MAP_H // -*- C++ -*-
+#define TERRA_MAP_H
 
 #include <stdlib.h>
 #include <iostream>
@@ -43,9 +43,6 @@ class DirectMap : public Map {
 
 protected:
     inline T &ref(int i, int j) {
-#ifdef SAFETY
-        assert(i>=0); assert(j>=0); assert(i<width); assert(j<height);
-#endif
 
         return data[j * width + i];
     }

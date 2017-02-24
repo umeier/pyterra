@@ -1,12 +1,11 @@
 #include <stdlib.h>
 #include <iostream>
-#include <assert.h>
 
 #include "Subdivision.h"
 
 using namespace std;
 
-Edge *Subdivision::makeEdge(Vec2 &org, Vec2 &dest) {
+Edge *Subdivision::makeEdge(Vertex2 &org, Vertex2 &dest) {
     Edge *e = new Edge();
     e->EndPoints(org, dest);
     return e;
@@ -16,12 +15,12 @@ Edge *Subdivision::makeEdge() {
     return new Edge();
 }
 
-void Subdivision::initMesh(const Vec2 &A, const Vec2 &B,
-                           const Vec2 &C, const Vec2 &D) {
-    Vec2 &a = A.clone();
-    Vec2 &b = B.clone();
-    Vec2 &c = C.clone();
-    Vec2 &d = D.clone();
+void Subdivision::initMesh(const Vertex2 &A, const Vertex2 &B,
+                           const Vertex2 &C, const Vertex2 &D) {
+    Vertex2 &a = A.clone();
+    Vertex2 &b = B.clone();
+    Vertex2 &c = C.clone();
+    Vertex2 &d = D.clone();
 
     Edge *ea = makeEdge();
     ea->EndPoints(a, b);
@@ -138,7 +137,7 @@ boolean Subdivision::ccwBoundary(const Edge *e) {
 }
 
 
-boolean Subdivision::onEdge(const Vec2 &x, Edge *e) {
+boolean Subdivision::onEdge(const Vertex2 &x, Edge *e) {
     real t1, t2, t3;
 
     t1 = (x - e->Org()).length();
@@ -170,13 +169,13 @@ boolean Subdivision::isInterior(Edge *e)
             e->Rnext()->Rnext()->Rnext() == e);
 }
 
-boolean Subdivision::shouldSwap(const Vec2 &x, Edge *e) {
+boolean Subdivision::shouldSwap(const Vertex2 &x, Edge *e) {
     Edge *t = e->Oprev();
     return inCircle(e->Org(), t->Dest(), e->Dest(), x);
 }
 
 
-Edge *Subdivision::locate(const Vec2 &x, Edge *start) {
+Edge *Subdivision::locate(const Vertex2 &x, Edge *start) {
     Edge *e = start;
     real t = triArea(x, e->Dest(), e->Org());
 
@@ -225,7 +224,7 @@ Edge *Subdivision::locate(const Vec2 &x, Edge *start) {
 }
 
 
-Edge *Subdivision::spoke(Vec2 &x, Edge *e) {
+Edge *Subdivision::spoke(Vertex2 &x, Edge *e) {
     Triangle *new_faces[4];
     int facedex = 0;
 
@@ -302,7 +301,7 @@ Edge *Subdivision::spoke(Vec2 &x, Edge *e) {
 //
 // s is a spoke pointing OUT from x
 //
-void Subdivision::optimize(Vec2 &x, Edge *s) {
+void Subdivision::optimize(Vertex2 &x, Edge *s) {
     Edge *start_spoke = s;
     Edge *spoke = s;
 
@@ -336,7 +335,7 @@ void Subdivision::optimize(Vec2 &x, Edge *s) {
     } while (spoke != start_spoke);
 }
 
-Edge *Subdivision::insert(Vec2 &x, Triangle *tri) {
+Edge *Subdivision::insert(Vertex2 &x, Triangle *tri) {
     Edge *e = tri ? locate(x, tri->getAnchor()) : locate(x);
 
     Edge *start_spoke = spoke(x, e);
@@ -382,6 +381,5 @@ void Triangle::update(Subdivision &)
 //
 // the default method will do nothing
 {
-
 
 }

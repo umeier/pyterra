@@ -1,5 +1,5 @@
-#ifndef SUBDIVISION_INCLUDED // -*- C++ -*-
-#define SUBDIVISION_INCLUDED
+#ifndef TERRA_SUBDIVISION_H // -*- C++ -*-
+#define TERRA_SUBDIVISION_H
 
 #include "Quadedge.h"
 
@@ -11,28 +11,36 @@ class Triangle : public Labelled {
 
 public:
 
-    Triangle(Edge *e, int t=0)
-    {
-	token = t;
-	reshape(e);
+    Triangle(Edge *e, int t = 0) {
+        token = t;
+        reshape(e);
     }
 
-    Triangle *linkTo(Triangle *t) { next_face = t; return this; }
+    Triangle *linkTo(Triangle *t) {
+        next_face = t;
+        return this;
+    }
+
     Triangle *getLink() { return next_face; }
+
     Edge *getAnchor() { return anchor; }
+
     void dontAnchor(Edge *e);
 
     void reshape(Edge *e);
 
-    virtual void update(Subdivision&); // called  to update stuff
+    virtual void update(Subdivision &); // called  to update stuff
 
-    const Vec2& point1() const { return anchor->Org(); }
-    const Vec2& point2() const { return anchor->Dest(); }
-    const Vec2& point3() const { return anchor->Lprev()->Org(); }
+    const Vertex2 &point1() const { return anchor->Org(); }
+
+    const Vertex2 &point2() const { return anchor->Dest(); }
+
+    const Vertex2 &point3() const { return anchor->Lprev()->Org(); }
 };
 
 typedef void (*edge_callback)(Edge *, void *);
-typedef void (*face_callback)(Triangle&, void *);
+
+typedef void (*face_callback)(Triangle &, void *);
 
 
 class Subdivision {
@@ -41,54 +49,65 @@ private:
     Triangle *first_face;
 
 protected:
-    void initMesh(const Vec2&, const Vec2&, const Vec2&, const Vec2&);
-    Subdivision() { }
+    void initMesh(const Vertex2 &, const Vertex2 &, const Vertex2 &, const Vertex2 &);
+
+    Subdivision() {}
 
     Edge *makeEdge();
-    Edge *makeEdge(Vec2& org, Vec2& dest);
+
+    Edge *makeEdge(Vertex2 &org, Vertex2 &dest);
 
     virtual Triangle *allocFace(Edge *e);
-    Triangle& makeFace(Edge *e);
+
+    Triangle &makeFace(Edge *e);
 
 
     void deleteEdge(Edge *);
+
     Edge *connect(Edge *a, Edge *b);
+
     void swap(Edge *e);
 
     //
     // Some random functions
     boolean ccwBoundary(const Edge *e);
-    boolean onEdge(const Vec2&, Edge *);
+
+    boolean onEdge(const Vertex2 &, Edge *);
 
 public:
 
-    Subdivision(Vec2& a, Vec2& b, Vec2& c, Vec2& d) { initMesh(a,b,c,d); }
+    Subdivision(Vertex2 &a, Vertex2 &b, Vertex2 &c, Vertex2 &d) { initMesh(a, b, c, d); }
 
     //
     // virtual functions for customization
-    virtual boolean shouldSwap(const Vec2&, Edge *);
+    virtual boolean shouldSwap(const Vertex2 &, Edge *);
 
 
     boolean isInterior(Edge *);
 
-    Edge *spoke(Vec2&, Edge *e);
-    void optimize(Vec2&, Edge *);
+    Edge *spoke(Vertex2 &, Edge *e);
 
-    Edge *locate(const Vec2& x)  { return locate(x, startingEdge); }
-    Edge *locate(const Vec2&, Edge *hint);
-    Edge *insert(Vec2&, Triangle *t=NULL);
+    void optimize(Vertex2 &, Edge *);
 
-    void overEdges(edge_callback, void *closure=NULL);
-    void overFaces(face_callback, void *closure=NULL);
+    Edge *locate(const Vertex2 &x) { return locate(x, startingEdge); }
+
+    Edge *locate(const Vertex2 &, Edge *hint);
+
+    Edge *insert(Vertex2 &, Triangle *t = NULL);
+
+    void overEdges(edge_callback, void *closure = NULL);
+
+    void overFaces(face_callback, void *closure = NULL);
 };
 
 
 #ifdef _GLIBCXX_IOSTREAM
-inline std::ostream& operator<<(std::ostream& out, Triangle& t)
-{
-    return out << "Triangle("<< t.point1() << " " << t.point2() << " "
-	       << t.point3() << ")";
+
+inline std::ostream &operator<<(std::ostream &out, Triangle &t) {
+    return out << "Triangle(" << t.point1() << " " << t.point2() << " "
+               << t.point3() << ")";
 }
+
 #endif
 
 

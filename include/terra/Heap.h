@@ -1,5 +1,5 @@
-#ifndef HEAP_INCLUDED // -*- C++ -*-
-#define HEAP_INCLUDED
+#ifndef TERRA_HEAP_H // -*- C++ -*-
+#define TERRA_HEAP_H
 
 #include "Geom.h"
 #include "Array.h"
@@ -17,11 +17,21 @@ public:
     real import;
     Labelled *obj;
 
-    heap_node() { obj=NULL; import=0.0; }
-    heap_node(Labelled *t, double i=0.0) { obj=t; import=i; }
-    heap_node(const heap_node& h) { import=h.import; obj=h.obj; }
-};
+    heap_node() {
+        obj = NULL;
+        import = 0.0;
+    }
 
+    heap_node(Labelled *t, double i = 0.0) {
+        obj = t;
+        import = i;
+    }
+
+    heap_node(const heap_node &h) {
+        import = h.import;
+        obj = h.obj;
+    }
+};
 
 
 class Heap : public array<heap_node> {
@@ -33,27 +43,33 @@ class Heap : public array<heap_node> {
 
     void swap(int i, int j);
 
-    int parent(int i) { return (i-1)/2; }
-    int left(int i) { return 2*i+1; }
-    int right(int i) { return 2*i+2; }
+    int parent(int i) { return (i - 1) / 2; }
+
+    int left(int i) { return 2 * i + 1; }
+
+    int right(int i) { return 2 * i + 2; }
 
     void upheap(int i);
+
     void downheap(int i);
 
 public:
 
-    Heap() { size=0; }
-    Heap(int s) : array<heap_node>(s) { size=0; }
+    Heap() { size = 0; }
+
+    Heap(int s) : array<heap_node>(s) { size = 0; }
 
 
     void insert(Labelled *, real);
+
     void update(Labelled *, real);
 
     heap_node *extract();
-    heap_node *top() { return size<1 ? (heap_node *)NULL : &ref(0); }
+
+    heap_node *top() { return size < 1 ? (heap_node *) NULL : &ref(0); }
+
     heap_node *kill(int i);
 };
-
 
 
 #endif

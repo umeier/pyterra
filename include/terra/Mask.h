@@ -1,5 +1,5 @@
-#ifndef MASK_INCLUDED // -*- C++ -*-
-#define MASK_INCLUDED
+#ifndef TERRA_MASK_H // -*- C++ -*-
+#define TERRA_MASK_H
 
 using namespace std;
 
@@ -32,14 +32,11 @@ inline RealMask::RealMask(int w, int h)
 {
     width = w;
     height = h;
-    data = (real *)calloc(w*h, sizeof(real));
+    data = (real *)calloc((size_t) (w * h), sizeof(real));
 }
 
 inline real& RealMask::ref(int i, int j)
 {
-#ifdef SAFETY
-	assert(i>=0); assert(j>=0); assert(i<width); assert(j<height);
-#endif
 
 	return data[j*width + i];
 }
