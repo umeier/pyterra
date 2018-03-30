@@ -30,7 +30,7 @@ extern void scripted_preinsertion(istream &);
 
 extern void subsample_insertion(int target_width);
 
-extern void generate_output(char *filename = NULL,
+extern void generate_output(char *filename = nullptr,
                             FileFormat format = NULLfile);
 
 extern void output_tin(ostream &);

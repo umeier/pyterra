@@ -6,7 +6,7 @@
 using namespace std;
 
 Edge *Subdivision::makeEdge(Vertex &org, Vertex &dest) {
-    Edge *e = new Edge();
+    auto *e = new Edge();
     e->set_end_points(org, dest);
     return e;
 }
@@ -45,7 +45,7 @@ void Subdivision::initMesh(const Vertex &A, const Vertex &B,
 
     startingEdge = ea;
 
-    first_face = NULL;
+    first_face = nullptr;
 
     makeFace(ea->Sym()).update(*this);
     makeFace(ec->Sym()).update(*this);
@@ -238,10 +238,10 @@ Edge *Subdivision::spoke(Vertex &x, Edge *e) {
         cerr << "WARNING: Tried to reinsert point: " << x << endl;
         cerr << "         org: " << e->Org() << endl;
         cerr << "        dest: " << e->Dest() << endl;
-        return NULL;
+        return nullptr;
     }
 
-    Edge *boundary_edge = NULL;
+    Edge *boundary_edge = nullptr;
 
     Triangle *lface = e->Lface();
     lface->dontAnchor(e);

@@ -6,28 +6,25 @@
 
 using namespace std;
 
-Edge::Edge(const Edge&)
-{
+Edge::Edge(const Edge&) : Labelled() {
     cerr << "Edge: Edge assignments are forbidden." << endl;
     exit(1);
 }
 
 
-Edge::Edge(Edge *prev)
-{
+Edge::Edge(Edge *prev) : Labelled() {
     qprev = prev;
     prev->qnext = this;
 
-    lface = NULL;
+    lface = nullptr;
     token = 0;
 }
 
-Edge::Edge()
-{
+Edge::Edge() : Labelled() {
     Edge *e0 = this;
-    Edge *e1 = new Edge(e0);
-    Edge *e2 = new Edge(e1);
-    Edge *e3 = new Edge(e2);
+    auto *e1 = new Edge(e0);
+    auto *e2 = new Edge(e1);
+    auto *e3 = new Edge(e2);
 
     qprev = e3;
     e3->qnext = e0;
@@ -37,7 +34,7 @@ Edge::Edge()
     e2->next = e2;
     e3->next = e1;
 
-    lface = NULL;
+    lface = nullptr;
     token = 0;
 }
 
@@ -49,9 +46,9 @@ Edge::~Edge()
 	Edge *e2 = qnext->qnext;
 	Edge *e3 = qprev;
 
-	e1->qnext = NULL;
-	e2->qnext = NULL;
-	e3->qnext = NULL;
+	e1->qnext = nullptr;
+	e2->qnext = nullptr;
+	e3->qnext = nullptr;
 
 	delete e1;
 	delete e2;

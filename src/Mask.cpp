@@ -1,59 +1,53 @@
 
 #include <iostream>
 
-#include "Geom.h"
 #include "Mask.h"
 
 
-RealMask *readMask(istream& in)
-{
-    char magicP, magicNum;
+RealMask *readMask(istream &in) {
+    char magicP, magicNum = 0;
 
-    int width, height, maxval;
+    int width, height = 0, maxval = 0;
 
     in >> magicP >> magicNum;
     in >> width >> height >> maxval;
 
-    if( magicP != 'P' )
-    {
-	cerr << "readMask: This is not PGM data." << endl;
-	return NULL;
+    if (magicP != 'P') {
+        cerr << "readMask: This is not PGM data." << endl;
+        return nullptr;
     }
 
-    RealMask *mask = new RealMask(width, height);
+    auto *mask = new RealMask(width, height);
 
-    if( magicNum == '2' ){
+    if (magicNum == '2') {
 
-	for(int j=0; j<height; j++)
-	    for(int i=0; i<width; i++)
-	    {
-		double val;
-		in >> val;
-		mask->ref(i, j) = val;
+        for (int j = 0; j < height; j++)
+            for (int i = 0; i < width; i++) {
+                double val;
+                in >> val;
+                mask->ref(i, j) = val;
 
-    }
-    }else if( magicNum == '5' ){
+            }
+    } else if (magicNum == '5') {
 
-	for(int j=0; j<height; j++)
-	    for(int i=0; i<width; i++){
+        for (int j = 0; j < height; j++)
+            for (int i = 0; i < width; i++) {
 
-		unsigned char val;
-		in >> val;
-		mask->ref(i, j) = (double)val;
-	    }
-    }
-    else
-    {
-	cerr << "readMask: This is not PGM data." << endl;
-	return NULL;
+                unsigned char val;
+                in >> val;
+                mask->ref(i, j) = (double) val;
+            }
+    } else {
+        cerr << "readMask: This is not PGM data." << endl;
+        return nullptr;
     }
 
 
     double max = (double) maxval;
 
-    for(int i=0; i<width; i++)
-	for(int j=0; j<height; j++)
-	    mask->ref(i,j) /= max;
+    for (int i = 0; i < width; i++)
+        for (int j = 0; j < height; j++)
+            mask->ref(i, j) /= max;
 
     return mask;
 }

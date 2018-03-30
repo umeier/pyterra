@@ -11,11 +11,11 @@ using namespace std;
 class Map {
 public:
 
-    int width;
-    int height;
-    int depth;  // in bits
+    int width{};
+    int height{};
+    int depth{};  // in bits
 
-    double min, max;
+    double min{}, max{};
 
     double operator()(int i, int j) { return eval(i, j); }
 
@@ -29,7 +29,7 @@ public:
 
     virtual void textRead(istream &) = 0;
 
-    virtual void *getBlock() { return NULL; }
+    virtual void *getBlock() { return nullptr; }
 
     virtual void findLimits();
 };
@@ -49,15 +49,15 @@ protected:
 
 public:
 
-    DirectMap(int width, int height);
+    DirectMap(int w, int h);
 
-    double eval(int i, int j) { return (double) ref(i, j); }
+    double eval(int i, int j) override { return (double) ref(i, j); }
 
-    void *getBlock() { return data; }
+    void *getBlock() override { return data; }
 
-    void rawRead(istream &);
+    void rawRead(istream &) override;
 
-    void textRead(istream &);
+    void textRead(istream &) override;
 };
 
 typedef DirectMap<unsigned char> ByteMap;

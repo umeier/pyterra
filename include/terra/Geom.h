@@ -20,9 +20,9 @@ enum Side {
     Left = -1, On = 0, Right = 1
 };
 
-#include <math.h>
+#include <cmath>
 #include "Vertex.h"
-#include "Vec3.h"
+#include "Vertex3.h"
 
 #ifndef NULL
 #define NULL 0
@@ -81,20 +81,20 @@ inline boolean inCircle(const Vertex &a, const Vertex &b, const Vertex &c,
 class Plane {
 public:
 
-    double a, b, c;
+    double a{}, b{}, c{};
 
-    Plane() {}
+    Plane() = default;
 
-    Plane(const Vec3 &p, const Vec3 &q, const Vec3 &r) { init(p, q, r); }
+    Plane(const Vertex3 &p, const Vertex3 &q, const Vertex3 &r) { init(p, q, r); }
 
-    inline void init(const Vec3 &p, const Vec3 &q, const Vec3 &r);
+    inline void init(const Vertex3 &p, const Vertex3 &q, const Vertex3 &r);
 
     double operator()(double x, double y) { return a * x + b * y + c; }
 
     double operator()(int x, int y) { return a * x + b * y + c; }
 };
 
-inline void Plane::init(const Vec3 &p, const Vec3 &q, const Vec3 &r)
+inline void Plane::init(const Vertex3 &p, const Vertex3 &q, const Vertex3 &r)
 // find the plane z=ax+by+c passing through three points p,q,r
 {
     // We explicitly declare these (rather than putting them in a

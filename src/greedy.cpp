@@ -2,7 +2,7 @@
 
 void scripted_preinsertion(istream &script) {
     char op[4];
-    int x, y;
+    int x = 0, y = 0;
 
     while (script.peek() != EOF) {
         script >> op >> x >> y;
@@ -37,7 +37,7 @@ void subsample_insertion(int target_width) {
 
     // 'i' is the target width and 'j' is the target height
 
-    double i = (double) target_width;
+    auto i = (double) target_width;
     double j = rint((i * height) / width);
 
     double dx = (width - 1) / (i - 1);

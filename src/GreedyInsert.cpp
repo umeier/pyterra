@@ -1,5 +1,5 @@
 #include <iostream>
-#include <assert.h>
+#include <cassert>
 #include "GreedyInsert.h"
 
 #include "Mask.h"
@@ -7,7 +7,7 @@
 extern ImportMask *MASK;
 
 void TrackedTriangle::update(Subdivision &s) {
-    Mesh &gs = (Mesh &) s;
+    auto &gs = (Mesh &) s;
     gs.scanTriangle(*this);
 }
 
@@ -56,9 +56,9 @@ void Mesh::compute_plane(Plane &plane,
     const Vertex &p2 = T.point2();
     const Vertex &p3 = T.point3();
 
-    Vec3 v1(p1, map(p1[X], p1[Y]));
-    Vec3 v2(p2, map(p2[X], p2[Y]));
-    Vec3 v3(p3, map(p3[X], p3[Y]));
+    Vertex3 v1(p1, map(p1[X], p1[Y]));
+    Vertex3 v2(p2, map(p2[X], p2[Y]));
+    Vertex3 v3(p3, map(p3[X], p3[Y]));
 
     plane.init(v1, v2, v3);
 }
@@ -91,8 +91,8 @@ void Mesh::scan_triangle_line(Plane &plane,
                               int y,
                               double x1, double x2,
                               Candidate &candidate) {
-    int startx = (int) ceil(MIN(x1, x2));
-    int endx = (int) floor(MAX(x1, x2));
+    auto startx = (int) ceil(MIN(x1, x2));
+    auto endx = (int) floor(MAX(x1, x2));
 
     if (startx > endx) return;
 
@@ -179,7 +179,7 @@ void Mesh::scanTriangle(TrackedTriangle &T) {
 Edge *Mesh::select(int sx, int sy, Triangle *t) {
     if (is_used(sx, sy)) {
         cerr << "   WARNING: Tried to reinsert point: " << sx << " " << sy << endl;
-        return NULL;
+        return nullptr;
     }
 
     is_used(sx, sy) = DATA_POINT_USED;

@@ -6,13 +6,12 @@
 class Subdivision;
 
 class Triangle : public Labelled {
-    Edge *anchor;
-    Triangle *next_face;
+    Edge *anchor{};
+    Triangle *next_face{};
 
 public:
 
-    Triangle(Edge *e, int t=0)
-    {
+    explicit Triangle(Edge *e, int t=0) : Labelled() {
 	token = t;
 	reshape(e);
     }
@@ -37,12 +36,12 @@ typedef void (*face_callback)(Triangle&, void *);
 
 class Subdivision {
 private:
-    Edge *startingEdge;
-    Triangle *first_face;
+    Edge *startingEdge{};
+    Triangle *first_face{};
 
 protected:
     void initMesh(const Vertex&, const Vertex&, const Vertex&, const Vertex&);
-    Subdivision() { }
+    Subdivision() = default;
 
     Edge *makeEdge();
     Edge *makeEdge(Vertex& org, Vertex& dest);
@@ -76,10 +75,10 @@ public:
 
     Edge *locate(const Vertex& x)  { return locate(x, startingEdge); }
     Edge *locate(const Vertex&, Edge *hint);
-    Edge *insert(Vertex&, Triangle *t=NULL);
+    Edge *insert(Vertex&, Triangle *t= nullptr);
 
-    void overEdges(edge_callback, void *closure=NULL);
-    void overFaces(face_callback, void *closure=NULL);
+    void overEdges(edge_callback, void *closure= nullptr);
+    void overFaces(face_callback, void *closure= nullptr);
 };
 
 

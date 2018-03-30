@@ -18,13 +18,13 @@ public:
 
 class RealMask : public ImportMask
 {
-    double *data;
+    double *data{};
 
 public:
-    RealMask(int width, int height);
+    RealMask(int w, int h);
 
-    inline double& ref(int x, int y);
-    double apply(int x, int y, double val) { return ref(x,y) * val; }
+    inline double& ref(int i, int j);
+    double apply(int x, int y, double val) override { return ref(x,y) * val; }
 };
 
 

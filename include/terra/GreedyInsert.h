@@ -8,15 +8,15 @@
 class TrackedTriangle : public Triangle {
     //
     // candidate position
-    int sx, sy;
+    int sx{}, sy{};
 
 
 public:
-    TrackedTriangle(Edge *e, int t = NOT_IN_HEAP)
+    explicit TrackedTriangle(Edge *e, int t = NOT_IN_HEAP)
             : Triangle(e, t) {
     }
 
-    void update(Subdivision &);
+    void update(Subdivision &) override;
 
 
     void setCandidate(int x, int y, double) {
@@ -34,7 +34,7 @@ public:
 class Candidate {
 public:
 
-    int x, y;
+    int x{}, y{};
     double import;
 
     Candidate() { import = -HUGE; }
@@ -57,7 +57,7 @@ protected:
 
     Map *H;
 
-    Triangle *allocFace(Edge *e);
+    Triangle *allocFace(Edge *e) override;
 
     void compute_plane(Plane &, Triangle &, Map &);
 
@@ -66,11 +66,11 @@ protected:
                             Candidate &candidate);
 
 public:
-    Mesh(Map *map);
+    explicit Mesh(Map *map);
 
     array2<char> is_used;
 
-    Edge *select(int sx, int sy, Triangle *t = NULL);
+    Edge *select(int sx, int sy, Triangle *t = nullptr);
 
     Map &getData() { return *H; }
 

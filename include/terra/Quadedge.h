@@ -9,7 +9,7 @@ class Edge : public Labelled {
 private:
     Edge *qnext, *qprev;
 
-    Edge(Edge *prev);
+    explicit Edge(Edge *prev);
 
 protected:
     Vertex *data;

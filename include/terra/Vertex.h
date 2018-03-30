@@ -3,20 +3,20 @@
 
 class Vertex {
 protected:
-    double elt[2];
+    double elt[2]{};
 
     inline void copy(const Vertex &v);
 
 public:
     // Standard constructors
-    Vertex(double x = 0, double y = 0) {
+    explicit Vertex(double x = 0, double y = 0) {
         elt[0] = x;
         elt[1] = y;
     }
 
     Vertex(const Vertex &v) { copy(v); }
 
-    Vertex(const double *v) {
+    explicit Vertex(const double *v) {
         elt[0] = v[0];
         elt[1] = v[1];
     }
@@ -68,8 +68,6 @@ public:
     inline double norm();
 
     inline double norm2();
-
-    inline double unitize();
 
     inline int operator==(const Vertex &v) const {
         return (*this - v).norm2() < EPS2;
@@ -151,13 +149,6 @@ inline double Vertex::norm() {
 
 inline double Vertex::norm2() {
     return elt[0] * elt[0] + elt[1] * elt[1];
-}
-
-inline double Vertex::unitize() {
-    double l = norm();
-    if (l != 1.0)
-        (*this) /= l;
-    return l;
 }
 
 #ifdef _GLIBCXX_IOSTREAM

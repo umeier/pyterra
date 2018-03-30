@@ -4,7 +4,7 @@
 #include "Geom.h"
 #include "Array.h"
 
-#define NOT_IN_HEAP -47
+#define NOT_IN_HEAP (-47)
 
 //
 //
@@ -17,8 +17,9 @@ public:
     double import;
     Labelled *obj;
 
-    heap_node() { obj=NULL; import=0.0; }
-    heap_node(Labelled *t, double i=0.0) { obj=t; import=i; }
+    heap_node() { obj= nullptr; import=0.0; }
+
+    explicit heap_node(Labelled *t, double i=0.0) { obj=t; import=i; }
     heap_node(const heap_node& h) { import=h.import; obj=h.obj; }
 };
 
@@ -43,7 +44,8 @@ class Heap : public array<heap_node> {
 public:
 
     Heap() { size=0; }
-    Heap(int s) : array<heap_node>(s) { size=0; }
+
+    explicit Heap(int s) : array<heap_node>(s) { size=0; }
 
 
     void insert(Labelled *, double);
@@ -51,7 +53,7 @@ public:
     void update(Labelled *, double);
 
     heap_node *extract();
-    heap_node *top() { return size<1 ? (heap_node *)NULL : &ref(0); }
+    heap_node *top() { return size<1 ? (heap_node *) nullptr : &ref(0); }
     heap_node *kill(int i);
 };
 

@@ -18,14 +18,14 @@ template<class T>
 class array {
 protected:
     T *data;
-    int len;
+    int len{};
 public:
     array() {
         data = NULL;
         len = 0;
     }
 
-    array(int l) { init(l); }
+    explicit array(int l) { init(l); }
 
     ~array() { free(); }
 
@@ -80,7 +80,7 @@ template<class T>
 class array2 {
 protected:
     T *data;
-    int w, h;
+    int w{}, h{};
 public:
     array2() {
         data = NULL;
@@ -91,7 +91,7 @@ public:
 
     ~array2() { free(); }
 
-    inline void init(int w, int h);
+    inline void init(int width, int height);
 
     inline void free();
 
