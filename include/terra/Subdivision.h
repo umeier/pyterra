@@ -76,9 +76,6 @@ protected:
 
 public:
 
-    Subdivision(Vertex &a, Vertex &b, Vertex &c, Vertex &d) { initMesh(a, b, c, d); }
-
-    //
     // virtual functions for customization
     virtual boolean shouldSwap(const Vertex &, Edge *);
 

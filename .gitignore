@@ -5,3 +5,6 @@ cmake-build-debug/
 *.tin
 *.eps
 *.dem
+build/
+testBin/
+

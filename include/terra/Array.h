@@ -42,8 +42,6 @@ public:
 
     inline T &operator()(int i) { return ref(i); }
 
-    inline int length() { return len; }
-
     inline int maxLength() { return len; }
 };
 
@@ -99,9 +97,6 @@ public:
 
     inline T &operator()(int i, int j) { return ref(i, j); }
 
-    inline int width() { return w; }
-
-    inline int height() { return h; }
 };
 
 template<class T>

@@ -43,7 +43,7 @@ RealMask *readMask(istream &in) {
     }
 
 
-    double max = (double) maxval;
+    auto max = (double) maxval;
 
     for (int i = 0; i < width; i++)
         for (int j = 0; j < height; j++)

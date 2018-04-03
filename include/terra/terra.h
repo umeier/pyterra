@@ -24,11 +24,7 @@ extern int goal_not_met();
 
 extern void greedy_insertion();
 
-extern void display_greedy_insertion(void (*callback)());
-
 extern void scripted_preinsertion(istream &);
-
-extern void subsample_insertion(int target_width);
 
 extern void generate_output(char *filename = nullptr,
                             FileFormat format = NULLfile);

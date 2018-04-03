@@ -71,14 +71,6 @@ public:
     friend std::istream& operator>>(std::istream&, Vertex3&);
 #endif
 
-    // Additional vector methods
-    inline double length();
-
-    inline double norm();
-
-    inline double norm2();
-
-    inline double unitize();
 };
 
 
@@ -156,25 +148,6 @@ inline Vertex3 Vertex3::operator^(const Vertex3 &v) const {
               -elt[0] * v[2] + v[0] * elt[2],
               elt[0] * v[1] - v[0] * elt[1]);
     return w;
-}
-
-inline double Vertex3::length() {
-    return norm();
-}
-
-inline double Vertex3::norm() {
-    return sqrt(elt[0] * elt[0] + elt[1] * elt[1] + elt[2] * elt[2]);
-}
-
-inline double Vertex3::norm2() {
-    return elt[0] * elt[0] + elt[1] * elt[1] + elt[2] * elt[2];
-}
-
-inline double Vertex3::unitize() {
-    double l = norm();
-    if (l != 1.0)
-        (*this) /= l;
-    return l;
 }
 
 #ifdef _GLIBCXX_IOSTREAM

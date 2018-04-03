@@ -72,8 +72,6 @@ public:
 
     Edge *select(int sx, int sy, Triangle *t = nullptr);
 
-    Map &getData() { return *H; }
-
     void scanTriangle(TrackedTriangle &t);
 
     int greedyInsert();

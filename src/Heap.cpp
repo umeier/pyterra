@@ -87,7 +87,7 @@ void Heap::update(Labelled *t,double v)
 
 
 heap_node *Heap::extract() {
-    if (size < 1) return 0;
+    if (size < 1) return nullptr;
 
     swap(0, size - 1);
     size--;

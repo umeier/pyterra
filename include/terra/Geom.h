@@ -14,10 +14,7 @@
 typedef int boolean;
 
 enum Axis {
-    X, Y, Z, W
-};
-enum Side {
-    Left = -1, On = 0, Right = 1
+    X, Y, Z
 };
 
 #include <cmath>
@@ -85,8 +82,6 @@ public:
 
     Plane() = default;
 
-    Plane(const Vertex3 &p, const Vertex3 &q, const Vertex3 &r) { init(p, q, r); }
-
     inline void init(const Vertex3 &p, const Vertex3 &q, const Vertex3 &r);
 
     double operator()(double x, double y) { return a * x + b * y + c; }
@@ -125,29 +120,6 @@ public:
 
     inline double eval(const Vertex &p) const {
         return (a * p[X] + b * p[Y] + c);
-    }
-
-    inline Side classify(const Vertex &p) const {
-        double d = eval(p);
-
-        if (d < -EPS)
-            return Left;
-        else if (d > EPS)
-            return Right;
-        else
-            return On;
-    }
-
-    inline Vertex intersect(const Line &l) const {
-        Vertex p;
-        intersect(l, p);
-        return p;
-    }
-
-    inline void intersect(const Line &l, Vertex &p) const {
-        double den = a * l.b - b * l.a;
-        p[X] = (b * l.c - c * l.b) / den;
-        p[Y] = (c * l.a - a * l.c) / den;
     }
 
 };

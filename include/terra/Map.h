@@ -13,7 +13,6 @@ public:
 
     int width{};
     int height{};
-    int depth{};  // in bits
 
     double min{}, max{};
 
@@ -28,8 +27,6 @@ public:
     virtual void rawRead(istream &) = 0;
 
     virtual void textRead(istream &) = 0;
-
-    virtual void *getBlock() { return nullptr; }
 
     virtual void findLimits();
 };
@@ -49,11 +46,12 @@ protected:
 
 public:
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
     DirectMap(int w, int h);
+#pragma clang diagnostic pop
 
     double eval(int i, int j) override { return (double) ref(i, j); }
-
-    void *getBlock() override { return data; }
 
     void rawRead(istream &) override;
 
@@ -63,21 +61,22 @@ public:
 typedef DirectMap<unsigned char> ByteMap;
 typedef DirectMap<unsigned short> ShortMap;
 typedef DirectMap<unsigned int> WordMap;
-typedef DirectMap<double> doubleMap;
 
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 template<class T>
 DirectMap<T>::DirectMap(int w, int h) {
     width = w;
     height = h;
-    depth = sizeof(T) << 3;
 
-    data = (T *) calloc((size_t) (w * h), sizeof(T));
+    data = (T *) calloc((size_t) (w * h), sizeof(T)); // NOLINT
 }
+#pragma clang diagnostic pop
 
 template<class T>
 void DirectMap<T>::rawRead(istream &in) {
-    char *loc = (char *) data;
+    auto *loc = (char *) data;
     int target = width * height * sizeof(T);
 
     while (target > 0) {

@@ -19,7 +19,6 @@ public:
 
     heap_node() { obj= nullptr; import=0.0; }
 
-    explicit heap_node(Labelled *t, double i=0.0) { obj=t; import=i; }
     heap_node(const heap_node& h) { import=h.import; obj=h.obj; }
 };
 
