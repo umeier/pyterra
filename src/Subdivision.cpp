@@ -1,13 +1,13 @@
-#include <stdlib.h>
+#include <cstdlib>
 #include <iostream>
 
 #include "Subdivision.h"
 
 using namespace std;
 
-Edge *Subdivision::makeEdge(Vertex2 &org, Vertex2 &dest) {
-    Edge *e = new Edge();
-    e->EndPoints(org, dest);
+Edge *Subdivision::makeEdge(Vertex &org, Vertex &dest) {
+    auto *e = new Edge();
+    e->set_end_points(org, dest);
     return e;
 }
 
@@ -15,37 +15,37 @@ Edge *Subdivision::makeEdge() {
     return new Edge();
 }
 
-void Subdivision::initMesh(const Vertex2 &A, const Vertex2 &B,
-                           const Vertex2 &C, const Vertex2 &D) {
-    Vertex2 &a = A.clone();
-    Vertex2 &b = B.clone();
-    Vertex2 &c = C.clone();
-    Vertex2 &d = D.clone();
+void Subdivision::initMesh(const Vertex &A, const Vertex &B,
+                           const Vertex &C, const Vertex &D) {
+    Vertex &a = A.clone();
+    Vertex &b = B.clone();
+    Vertex &c = C.clone();
+    Vertex &d = D.clone();
 
     Edge *ea = makeEdge();
-    ea->EndPoints(a, b);
+    ea->set_end_points(a, b);
 
     Edge *eb = makeEdge();
     splice(ea->Sym(), eb);
-    eb->EndPoints(b, c);
+    eb->set_end_points(b, c);
 
     Edge *ec = makeEdge();
     splice(eb->Sym(), ec);
-    ec->EndPoints(c, d);
+    ec->set_end_points(c, d);
 
     Edge *ed = makeEdge();
     splice(ec->Sym(), ed);
-    ed->EndPoints(d, a);
+    ed->set_end_points(d, a);
     splice(ed->Sym(), ea);
 
     Edge *diag = makeEdge();
     splice(ed->Sym(), diag);
     splice(eb->Sym(), diag->Sym());
-    diag->EndPoints(a, c);
+    diag->set_end_points(a, c);
 
     startingEdge = ea;
 
-    first_face = NULL;
+    first_face = nullptr;
 
     makeFace(ea->Sym()).update(*this);
     makeFace(ec->Sym()).update(*this);
@@ -64,7 +64,7 @@ Edge *Subdivision::connect(Edge *a, Edge *b) {
     Edge *e = makeEdge();
     splice(e, a->Lnext());
     splice(e->Sym(), b);
-    e->EndPoints(a->Dest(), b->Org());
+    e->set_end_points(a->Dest(), b->Org());
 
     return e;
 }
@@ -80,7 +80,7 @@ void Subdivision::swap(Edge *e) {
     splice(e->Sym(), b);
     splice(e, a->Lnext());
     splice(e->Sym(), b->Lnext());
-    e->EndPoints(a->Dest(), b->Dest());
+    e->set_end_points(a->Dest(), b->Dest());
 
 
     f1->reshape(e);
@@ -137,8 +137,8 @@ boolean Subdivision::ccwBoundary(const Edge *e) {
 }
 
 
-boolean Subdivision::onEdge(const Vertex2 &x, Edge *e) {
-    real t1, t2, t3;
+boolean Subdivision::onEdge(const Vertex &x, Edge *e) {
+    double t1, t2, t3;
 
     t1 = (x - e->Org()).length();
     t2 = (x - e->Dest()).length();
@@ -169,15 +169,15 @@ boolean Subdivision::isInterior(Edge *e)
             e->Rnext()->Rnext()->Rnext() == e);
 }
 
-boolean Subdivision::shouldSwap(const Vertex2 &x, Edge *e) {
+boolean Subdivision::shouldSwap(const Vertex &x, Edge *e) {
     Edge *t = e->Oprev();
     return inCircle(e->Org(), t->Dest(), e->Dest(), x);
 }
 
 
-Edge *Subdivision::locate(const Vertex2 &x, Edge *start) {
+Edge *Subdivision::locate(const Vertex &x, Edge *start) {
     Edge *e = start;
-    real t = triArea(x, e->Dest(), e->Org());
+    double t = triArea(x, e->Dest(), e->Org());
 
     if (t > 0) {                  // x is to the right of edge e
         t = -t;
@@ -189,8 +189,8 @@ Edge *Subdivision::locate(const Vertex2 &x, Edge *start) {
         Edge *eo = e->Onext();
         Edge *ed = e->Dprev();
 
-        real to = triArea(x, eo->Dest(), eo->Org());
-        real td = triArea(x, ed->Dest(), ed->Org());
+        double to = triArea(x, eo->Dest(), eo->Org());
+        double td = triArea(x, ed->Dest(), ed->Org());
 
         if (td > 0)                       // x is below ed
             if (to > 0 || (to == 0 && t == 0)) {// x is interior, or origin endpoint
@@ -224,7 +224,7 @@ Edge *Subdivision::locate(const Vertex2 &x, Edge *start) {
 }
 
 
-Edge *Subdivision::spoke(Vertex2 &x, Edge *e) {
+Edge *Subdivision::spoke(Vertex &x, Edge *e) {
     Triangle *new_faces[4];
     int facedex = 0;
 
@@ -238,10 +238,10 @@ Edge *Subdivision::spoke(Vertex2 &x, Edge *e) {
         cerr << "WARNING: Tried to reinsert point: " << x << endl;
         cerr << "         org: " << e->Org() << endl;
         cerr << "        dest: " << e->Dest() << endl;
-        return NULL;
+        return nullptr;
     }
 
-    Edge *boundary_edge = NULL;
+    Edge *boundary_edge = nullptr;
 
     Triangle *lface = e->Lface();
     lface->dontAnchor(e);
@@ -301,7 +301,7 @@ Edge *Subdivision::spoke(Vertex2 &x, Edge *e) {
 //
 // s is a spoke pointing OUT from x
 //
-void Subdivision::optimize(Vertex2 &x, Edge *s) {
+void Subdivision::optimize(Vertex &x, Edge *s) {
     Edge *start_spoke = s;
     Edge *spoke = s;
 
@@ -335,7 +335,7 @@ void Subdivision::optimize(Vertex2 &x, Edge *s) {
     } while (spoke != start_spoke);
 }
 
-Edge *Subdivision::insert(Vertex2 &x, Triangle *tri) {
+Edge *Subdivision::insert(Vertex &x, Triangle *tri) {
     Edge *e = tri ? locate(x, tri->getAnchor()) : locate(x);
 
     Edge *start_spoke = spoke(x, e);
@@ -381,5 +381,6 @@ void Triangle::update(Subdivision &)
 //
 // the default method will do nothing
 {
+
 
 }

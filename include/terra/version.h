@@ -1,3 +1,5 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedMacroInspection"
 #ifndef TERRA_VERSION_H
 #define TERRA_VERSION_H
 
@@ -6,3 +8,5 @@
 #define terra_tag_string "RELEASE_0_7"
 
 #endif
+
+#pragma clang diagnostic pop

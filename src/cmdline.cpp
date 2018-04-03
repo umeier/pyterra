@@ -1,23 +1,23 @@
-#include <stdlib.h>
+#include <cstdlib>
 #include <fstream>
-#include <string.h>
+#include <cstring>
 #include <getopt.h>
 #include "terra.h"
 
-GreedySubdivision *mesh;
+Mesh *mesh;
 Map *DEM;
 
-static ImportMask default_mask;
+static ImportMask default_mask; // NOLINT
 ImportMask *MASK;
 
 
-real error_threshold = 0.0;
+double error_threshold = 0.0;
 int point_limit = -1;
-real height_scale = 1.0;
+double height_scale = 1.0;
 FileFormat output_format;
-char *output_filename = NULL;
-char *mask_filename = NULL;
-char *script_filename = NULL;
+char *output_filename = nullptr;
+char *mask_filename = nullptr;
+char *script_filename = nullptr;
 
 static char *options = (char *) "e:p:h:o:m:s:";
 
@@ -32,7 +32,7 @@ static char *usage_string =
                 "-s <file>        Execute preinsertion script from <file>\n"
                 "\n";
 
-static void usage_error(char *msg = NULL) {
+static void usage_error(char *msg = nullptr) {
     if (msg)
         cerr << msg << endl;
 
@@ -52,17 +52,17 @@ void process_cmdline(int argc, char **argv) {
 
         switch (c) {
             case 'e':
-                error_threshold = atof(optarg);
+                error_threshold = strtod(optarg, nullptr);
                 cerr << "    Setting error threshold to " << error_threshold << endl;
                 break;
 
             case 'p':
-                point_limit = atoi(optarg);
+                point_limit = (int)strtol(optarg, nullptr, 10);
                 cerr << "    Setting point limit to " << point_limit << endl;
                 break;
 
             case 'h':
-                height_scale = atof(optarg);
+                height_scale = strtod(optarg, nullptr);
                 cerr << "    Setting height scaling factor to " << height_scale
                      << endl;
                 break;
@@ -145,7 +145,7 @@ void process_cmdline(int argc, char **argv) {
     }
 
 
-    mesh = new GreedySubdivision(DEM);
+    mesh = new Mesh(DEM);
 
 
     ////////////////////////////////////////////////////////////////

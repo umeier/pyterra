@@ -6,13 +6,13 @@
 #include "Mask.h"
 
 
-extern GreedySubdivision *mesh;
+extern Mesh *mesh;
 extern Map *DEM;
 extern ImportMask *MASK;
 
-extern real error_threshold;
+extern double error_threshold;
 extern int point_limit;
-extern real height_scale;
+extern double height_scale;
 enum FileFormat {
     NULLfile, TINfile, EPSfile, DEMfile, OBJfile, RMSfile
 };
@@ -24,13 +24,9 @@ extern int goal_not_met();
 
 extern void greedy_insertion();
 
-extern void display_greedy_insertion(void (*callback)());
-
 extern void scripted_preinsertion(istream &);
 
-extern void subsample_insertion(int target_width);
-
-extern void generate_output(char *filename = NULL,
+extern void generate_output(char *filename = nullptr,
                             FileFormat format = NULLfile);
 
 extern void output_tin(ostream &);

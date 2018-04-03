@@ -1,4 +1,4 @@
-#include <math.h>
+#include <cmath>
 
 #include "Geom.h"
 #include "Map.h"
@@ -9,7 +9,7 @@ void Map::findLimits() {
 
     for (int i = 0; i < width; i++)
         for (int j = 0; j < height; j++) {
-            real val = eval(i, j);
+            double val = eval(i, j);
 
             if (val < min) min = val;
             if (val > max) max = val;
@@ -20,7 +20,7 @@ void Map::findLimits() {
 Map *readPGM(istream &in) {
     char magicP, magicNum;
 
-    int width, height, maxval;
+    int width, height = 0, maxval = 0;
 
     in >> magicP;
     in >> magicNum;
@@ -28,7 +28,7 @@ Map *readPGM(istream &in) {
 
     if (magicP != 'P') {
         cerr << "readPGM: This is not PGM data." << endl;
-        return NULL;
+        return nullptr;
     }
 
     Map *map;
@@ -58,7 +58,7 @@ Map *readPGM(istream &in) {
 
         default:
             cerr << "readPGM: This is not PGM data." << endl;
-            return NULL;
+            return nullptr;
     }
 
     map->findLimits();

@@ -2,7 +2,7 @@
 
 void scripted_preinsertion(istream &script) {
     char op[4];
-    int x, y;
+    int x = 0, y = 0;
 
     while (script.peek() != EOF) {
         script >> op >> x >> y;
@@ -31,30 +31,6 @@ void scripted_preinsertion(istream &script) {
     }
 }
 
-void subsample_insertion(int target_width) {
-    int width = DEM->width;
-    int height = DEM->height;
-
-    // 'i' is the target width and 'j' is the target height
-
-    real i = (real) target_width;
-    real j = rint((i * height) / width);
-
-    real dx = (width - 1) / (i - 1);
-    real dy = (height - 1) / (j - 1);
-
-    real u, v;
-    int x, y;
-    for (u = 0; u < i; u++)
-        for (v = 0; v < j; v++) {
-            x = (int) rint(u * dx);
-            y = (int) rint(v * dy);
-
-            if (!mesh->is_used(x, y))
-                mesh->select(x, y);
-        }
-}
-
 inline int goal_not_met() {
     return mesh->maxError() > error_threshold &&
            mesh->pointCount() < point_limit;
@@ -78,15 +54,3 @@ void greedy_insertion() {
     announce_goal();
 }
 
-void display_greedy_insertion(void (*callback)()) {
-
-    while (goal_not_met()) {
-        if (!mesh->greedyInsert()) {
-            (*callback)();
-            break;
-        }
-        (*callback)();
-    }
-
-    announce_goal();
-}

@@ -3,44 +3,44 @@
 
 using namespace std;
 
-class ImportMask
-{
+class ImportMask {
 
 public:
     int width, height;
 
-    ImportMask() { width=0; height=0; }
+    ImportMask() {
+        width = 0;
+        height = 0;
+    }
 
 
-    virtual real apply(int /*x*/, int /*y*/, real val) { return val; }
+    virtual double apply(int /*x*/, int /*y*/, double val) { return val; }
 };
 
 
-class RealMask : public ImportMask
-{
-    real *data;
+class RealMask : public ImportMask {
+    double *data{};
 
 public:
-    RealMask(int width, int height);
+    RealMask(int w, int h);
 
-    inline real& ref(int x, int y);
-    real apply(int x, int y, real val) { return ref(x,y) * val; }
+    inline double &ref(int i, int j);
+
+    double apply(int x, int y, double val) override { return ref(x, y) * val; }
 };
 
 
-inline RealMask::RealMask(int w, int h)
-{
+inline RealMask::RealMask(int w, int h) {
     width = w;
     height = h;
-    data = (real *)calloc((size_t) (w * h), sizeof(real));
+    data = (double *) calloc((size_t) (w * h), sizeof(double));
 }
 
-inline real& RealMask::ref(int i, int j)
-{
+inline double &RealMask::ref(int i, int j) {
 
-	return data[j*width + i];
+    return data[j * width + i];
 }
 
-extern RealMask *readMask(istream&);
+extern RealMask *readMask(istream &);
 
 #endif

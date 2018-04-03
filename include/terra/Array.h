@@ -1,7 +1,7 @@
 #ifndef TERRA_ARRAY_H // -*- C++ -*-
 #define TERRA_ARRAY_H
 
-#include <string.h>
+#include <cstring>
 
 //
 // Array classes
@@ -18,14 +18,14 @@ template<class T>
 class array {
 protected:
     T *data;
-    int len;
+    int len{};
 public:
     array() {
         data = NULL;
         len = 0;
     }
 
-    array(int l) { init(l); }
+    explicit array(int l) { init(l); }
 
     ~array() { free(); }
 
@@ -41,8 +41,6 @@ public:
     inline T &operator[](int i) { return data[i]; }
 
     inline T &operator()(int i) { return ref(i); }
-
-    inline int length() { return len; }
 
     inline int maxLength() { return len; }
 };
@@ -80,7 +78,7 @@ template<class T>
 class array2 {
 protected:
     T *data;
-    int w, h;
+    int w{}, h{};
 public:
     array2() {
         data = NULL;
@@ -91,7 +89,7 @@ public:
 
     ~array2() { free(); }
 
-    inline void init(int w, int h);
+    inline void init(int width, int height);
 
     inline void free();
 
@@ -99,9 +97,6 @@ public:
 
     inline T &operator()(int i, int j) { return ref(i, j); }
 
-    inline int width() { return w; }
-
-    inline int height() { return h; }
 };
 
 template<class T>

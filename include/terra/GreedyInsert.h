@@ -8,18 +8,18 @@
 class TrackedTriangle : public Triangle {
     //
     // candidate position
-    int sx, sy;
+    int sx{}, sy{};
 
 
 public:
-    TrackedTriangle(Edge *e, int t = NOT_IN_HEAP)
+    explicit TrackedTriangle(Edge *e, int t = NOT_IN_HEAP)
             : Triangle(e, t) {
     }
 
-    void update(Subdivision &);
+    void update(Subdivision &) override;
 
 
-    void setCandidate(int x, int y, real) {
+    void setCandidate(int x, int y, double) {
         sx = x;
         sy = y;
     }
@@ -34,12 +34,12 @@ public:
 class Candidate {
 public:
 
-    int x, y;
-    real import;
+    int x{}, y{};
+    double import;
 
     Candidate() { import = -HUGE; }
 
-    void consider(int sx, int sy, real i) {
+    void consider(int sx, int sy, double i) {
         if (i > import) {
             x = sx;
             y = sy;
@@ -49,7 +49,7 @@ public:
 };
 
 
-class GreedySubdivision : public Subdivision {
+class Mesh : public Subdivision {
     Heap *heap;
     unsigned int count;
 
@@ -57,22 +57,20 @@ protected:
 
     Map *H;
 
-    Triangle *allocFace(Edge *e);
+    Triangle *allocFace(Edge *e) override;
 
     void compute_plane(Plane &, Triangle &, Map &);
 
     void scan_triangle_line(Plane &plane,
-                            int y, real x1, real x2,
+                            int y, double x1, double x2,
                             Candidate &candidate);
 
 public:
-    GreedySubdivision(Map *map);
+    explicit Mesh(Map *map);
 
     array2<char> is_used;
 
-    Edge *select(int sx, int sy, Triangle *t = NULL);
-
-    Map &getData() { return *H; }
+    Edge *select(int sx, int sy, Triangle *t = nullptr);
 
     void scanTriangle(TrackedTriangle &t);
 
@@ -80,11 +78,11 @@ public:
 
     unsigned int pointCount() { return count; }
 
-    real maxError();
+    double maxError();
 
-    real rmsError();
+    double rmsError();
 
-    real eval(int x, int y);
+    double eval(int x, int y);
 };
 
 //
