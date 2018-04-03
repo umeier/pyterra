@@ -7,11 +7,6 @@ set(terra_VERSION_MINOR 7)
 set(terra_VERSION_PATCH 0)
 set(terra_VERSION ${terra_VERSION_MAJOR}.${terra_VERSION_MINOR}.${terra_VERSION_PATCH})
 
-set(terra_VERSION_MAJOR 0)
-set(terra_VERSION_MINOR 7)
-set(terra_VERSION_PATCH 0)
-set(terra_VERSION ${terra_VERSION_MAJOR}.${terra_VERSION_MINOR}.${terra_VERSION_PATCH})
-
 subdirs(src)
 include_directories(${terra_SOURCE_DIR}/include/terra)
 
