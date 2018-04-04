@@ -7,7 +7,11 @@ set(terra_VERSION_MINOR 7)
 set(terra_VERSION_PATCH 0)
 set(terra_VERSION ${terra_VERSION_MAJOR}.${terra_VERSION_MINOR}.${terra_VERSION_PATCH})
 
+
+add_subdirectory(pybind11)
 subdirs(src)
+
+
 include_directories(${terra_SOURCE_DIR}/include/terra)
 
 enable_testing()
@@ -25,4 +29,5 @@ foreach (testSrc ${TEST_SRCS})
     set_target_properties(${testName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/testBin)
     add_test(NAME ${testName} WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/testBin COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/testBin/${testName})
 endforeach (testSrc)
+
 
