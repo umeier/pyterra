@@ -237,3 +237,25 @@ double Mesh::eval(int x, int y) {
 
     return z_plane(x, y);
 }
+
+Mesh::Mesh(Map *map, const Vertex &A, const Vertex &B, const Vertex &C) {
+
+    H = map;
+    heap = new Heap(128);
+
+    int w = H->width;
+    int h = H->height;
+
+    is_used.init(w, h);
+    int x, y;
+    for (x = 0; x < w; x++)
+        for (y = 0; y < h; y++)
+            is_used(x, y) = DATA_POINT_UNUSED;
+
+    initMesh(A, B, C);
+    is_used((int) A(0), (int) A(1)) = DATA_POINT_USED;
+    is_used((int) B(0), (int) B(1)) = DATA_POINT_USED;
+    is_used((int) C(0), (int) C(1)) = DATA_POINT_USED;
+    count = 3;
+
+}

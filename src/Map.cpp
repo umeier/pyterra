@@ -65,3 +65,13 @@ Map *readPGM(istream &in) {
 
     return map;
 }
+
+Map *readDouble(double *values, int width, int height) {
+    Map *map;
+    map = new DoubleMap(width, height);
+    map->doubleRead(values);
+    map->findLimits();
+    return map;
+}
+
+

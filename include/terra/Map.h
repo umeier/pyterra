@@ -28,11 +28,13 @@ public:
 
     virtual void textRead(istream &) = 0;
 
+    virtual void doubleRead(double[]) = 0;
+
     virtual void findLimits();
 };
 
 extern Map *readPGM(istream &);
-
+extern Map *readDouble(double[], int width, int heigt);
 
 template<class T>
 class DirectMap : public Map {
@@ -48,7 +50,9 @@ public:
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
+
     DirectMap(int w, int h);
+
 #pragma clang diagnostic pop
 
     double eval(int i, int j) override { return (double) ref(i, j); }
@@ -56,15 +60,19 @@ public:
     void rawRead(istream &) override;
 
     void textRead(istream &) override;
+
+    void doubleRead(double *) override;
 };
 
 typedef DirectMap<unsigned char> ByteMap;
 typedef DirectMap<unsigned short> ShortMap;
 typedef DirectMap<unsigned int> WordMap;
+typedef DirectMap<double> DoubleMap;
 
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
+
 template<class T>
 DirectMap<T>::DirectMap(int w, int h) {
     width = w;
@@ -72,6 +80,7 @@ DirectMap<T>::DirectMap(int w, int h) {
 
     data = (T *) calloc((size_t) (w * h), sizeof(T)); // NOLINT
 }
+
 #pragma clang diagnostic pop
 
 template<class T>
@@ -96,5 +105,14 @@ void DirectMap<T>::textRead(istream &in) {
         }
 }
 
+template<class T>
+void DirectMap<T>::doubleRead(double *indata) {
+    for (int j = 0; j < height; j++)
+        for (int i = 0; i < width; i++) {
+            double val;
+            val = indata[j * width + i];
+            ref(i, j) = (T) val;
+        }
+}
 
 #endif

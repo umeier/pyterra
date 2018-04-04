@@ -359,6 +359,31 @@ Triangle &Subdivision::makeFace(Edge *e) {
     return *t;
 }
 
+void Subdivision::initMesh(const Vertex &A, const Vertex &B, const Vertex &C) {
+
+    Vertex &a = A.clone();
+    Vertex &b = B.clone();
+    Vertex &c = C.clone();
+
+    Edge *ea = makeEdge();
+    ea->set_end_points(a, b);
+
+    Edge *eb = makeEdge();
+    splice(ea->Sym(), eb);
+    eb->set_end_points(b, c);
+
+    Edge *ec = makeEdge();
+    splice(eb->Sym(), ec);
+    ec->set_end_points(c, a);
+    splice(ec->Sym(), ea);
+
+    startingEdge = ea;
+
+    first_face = nullptr;
+
+    makeFace(ea->Sym()).update(*this);
+}
+
 
 void Triangle::dontAnchor(Edge *e) {
     if (anchor == e) {

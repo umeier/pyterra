@@ -50,6 +50,8 @@ private:
 
 protected:
     void initMesh(const Vertex &, const Vertex &, const Vertex &, const Vertex &);
+    // Triangle only
+    void initMesh(const Vertex &, const Vertex &, const Vertex &);
 
     Subdivision() = default;
 

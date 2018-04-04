@@ -67,6 +67,7 @@ protected:
 
 public:
     explicit Mesh(Map *map);
+    Mesh(Map *map, const Vertex &, const Vertex &, const Vertex &);
 
     array2<char> is_used;
 
