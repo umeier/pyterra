@@ -8,12 +8,16 @@
 #include "terra.h"
 #include "test_settings.h"
 
+
 Mesh *mesh;
 ImportMask *MASK;
 double error_threshold = 0.0;
 int point_limit = -1;
 Map *DEM;
 static ImportMask default_mask;
+
+BOOST_AUTO_TEST_SUITE( terra_test_suite )
+
 
 BOOST_AUTO_TEST_CASE(double_test) {
     MASK = &default_mask;
@@ -46,3 +50,5 @@ BOOST_AUTO_TEST_CASE(triangle_test) {
     BOOST_CHECK(mesh->is_used(3, 1) == 0);
     greedy_insertion();
 }
+
+BOOST_AUTO_TEST_SUITE_END()

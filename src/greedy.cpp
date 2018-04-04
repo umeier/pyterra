@@ -36,13 +36,6 @@ inline int goal_not_met() {
            mesh->pointCount() < point_limit;
 }
 
-static void announce_goal() {
-    cerr << "Goal conditions met:" << endl;
-    cerr << "     error=" << mesh->maxError()
-         << " [thresh=" << error_threshold << "]" << endl;
-    cerr << "     points=" << mesh->pointCount()
-         << " [limit=" << point_limit << "]" << endl;
-}
 
 void greedy_insertion() {
 
@@ -51,6 +44,5 @@ void greedy_insertion() {
             break;
     }
 
-    announce_goal();
 }
 
