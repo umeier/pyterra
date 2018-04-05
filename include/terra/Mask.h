@@ -41,6 +41,4 @@ inline double &RealMask::ref(int i, int j) {
     return data[j * width + i];
 }
 
-extern RealMask *readMask(istream &);
-
 #endif

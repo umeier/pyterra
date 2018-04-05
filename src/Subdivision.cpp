@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <iostream>
+#include <vector>
 
 #include "Subdivision.h"
 
@@ -382,6 +383,10 @@ void Subdivision::initMesh(const Vertex &A, const Vertex &B, const Vertex &C) {
     first_face = nullptr;
 
     makeFace(ea->Sym()).update(*this);
+}
+
+Triangle *Subdivision::getFirstFace() {
+    return first_face;
 }
 
 

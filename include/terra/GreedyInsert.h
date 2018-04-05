@@ -4,6 +4,14 @@
 #include "Heap.h"
 #include "Subdivision.h"
 #include "Map.h"
+#include "Mask.h"
+
+typedef vector<Triangle *> tin_triangles;
+
+
+typedef tuple<int, int, double> point3d;
+typedef tuple<point3d, point3d, point3d> triangle3d;
+typedef vector<triangle3d> calculated_tin;
 
 class TrackedTriangle : public Triangle {
     //
@@ -52,6 +60,7 @@ public:
 class Mesh : public Subdivision {
     Heap *heap;
     unsigned int count;
+    ImportMask *MASK;
 
 protected:
 
@@ -81,9 +90,9 @@ public:
 
     double maxError();
 
-    double rmsError();
-
     double eval(int x, int y);
+
+    tin_triangles getTriangles();
 };
 
 //

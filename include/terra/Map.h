@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <vector>
 
 #include "Geom.h"
 
@@ -20,21 +21,14 @@ public:
 
     double operator()(double i, double j) { return eval((int) i, (int) j); }
 
-    double eval(double i, double j) { return eval((int) i, (int) j); }
-
     virtual double eval(int i, int j) = 0;
 
-    virtual void rawRead(istream &) = 0;
-
-    virtual void textRead(istream &) = 0;
-
-    virtual void doubleRead(double[]) = 0;
+    virtual void doubleRead(vector<double>) = 0;
 
     virtual void findLimits();
 };
 
-extern Map *readPGM(istream &);
-extern Map *readDouble(double[], int width, int heigt);
+extern Map *readDouble(vector<double> values, int width, int heigt);
 
 template<class T>
 class DirectMap : public Map {
@@ -57,16 +51,9 @@ public:
 
     double eval(int i, int j) override { return (double) ref(i, j); }
 
-    void rawRead(istream &) override;
-
-    void textRead(istream &) override;
-
-    void doubleRead(double *) override;
+    void doubleRead(vector<double>) override;
 };
 
-typedef DirectMap<unsigned char> ByteMap;
-typedef DirectMap<unsigned short> ShortMap;
-typedef DirectMap<unsigned int> WordMap;
 typedef DirectMap<double> DoubleMap;
 
 
@@ -84,29 +71,7 @@ DirectMap<T>::DirectMap(int w, int h) {
 #pragma clang diagnostic pop
 
 template<class T>
-void DirectMap<T>::rawRead(istream &in) {
-    auto *loc = (char *) data;
-    int target = width * height * sizeof(T);
-
-    while (target > 0) {
-        in.read(loc, target);
-        target -= in.gcount();
-        loc += in.gcount();
-    }
-}
-
-template<class T>
-void DirectMap<T>::textRead(istream &in) {
-    for (int j = 0; j < height; j++)
-        for (int i = 0; i < width; i++) {
-            double val;
-            in >> val;
-            ref(i, j) = (T) val;
-        }
-}
-
-template<class T>
-void DirectMap<T>::doubleRead(double *indata) {
+void DirectMap<T>::doubleRead(vector<double> indata) {
     for (int j = 0; j < height; j++)
         for (int i = 0; i < width; i++) {
             double val;

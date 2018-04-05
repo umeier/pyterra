@@ -3,6 +3,8 @@
 
 #include "Quadedge.h"
 
+using namespace std;
+
 class Subdivision;
 
 class Triangle : public Labelled {
@@ -81,6 +83,7 @@ public:
     // virtual functions for customization
     virtual boolean shouldSwap(const Vertex &, Edge *);
 
+    Triangle* getFirstFace();
 
     boolean isInterior(Edge *);
 

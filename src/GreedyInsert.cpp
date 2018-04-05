@@ -4,8 +4,6 @@
 
 #include "Mask.h"
 
-extern ImportMask *MASK;
-
 void TrackedTriangle::update(Subdivision &s) {
     auto &gs = (Mesh &) s;
     gs.scanTriangle(*this);
@@ -15,6 +13,8 @@ void TrackedTriangle::update(Subdivision &s) {
 Mesh::Mesh(Map *map) {
     H = map;
     heap = new Heap(128);
+    static ImportMask default_mask;
+    MASK = &default_mask;
 
     int w = H->width;
     int h = H->height;
@@ -212,21 +212,6 @@ double Mesh::maxError() {
     return node->import;
 }
 
-double Mesh::rmsError() {
-    double err = 0.0;
-    int width = H->width;
-    int height = H->height;
-
-
-    for (int i = 0; i < width; i++)
-        for (int j = 0; j < height; j++) {
-            double diff = eval(i, j) - H->eval(i, j);
-            err += diff * diff;
-        }
-
-    return sqrt(err / (width * height));
-}
-
 
 double Mesh::eval(int x, int y) {
     Vertex p(x, y);
@@ -243,6 +228,9 @@ Mesh::Mesh(Map *map, const Vertex &A, const Vertex &B, const Vertex &C) {
     H = map;
     heap = new Heap(128);
 
+    static ImportMask default_mask;
+    MASK = &default_mask;
+
     int w = H->width;
     int h = H->height;
 
@@ -258,4 +246,14 @@ Mesh::Mesh(Map *map, const Vertex &A, const Vertex &B, const Vertex &C) {
     is_used((int) C(0), (int) C(1)) = DATA_POINT_USED;
     count = 3;
 
+}
+
+tin_triangles Mesh::getTriangles() {
+    vector<Triangle *> triangles;
+    Triangle *t = getFirstFace();
+    while (t) {
+        triangles.push_back(t);
+        t = t->getLink();
+    }
+    return triangles;
 }
