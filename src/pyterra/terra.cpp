@@ -82,7 +82,7 @@ vector<triangle3d> PyTerra::get_result() {
 
 
 PYBIND11_MODULE(pyterra, m) {
-    m.doc() = "terra tin rendering plugin";
+    m.doc() = "pyterra tin rendering plugin";
     py::class_<PyTerra> pyterra(m, "PyTerra");
     pyterra.def(py::init<vector<double> &, int, int>());
     pyterra.def(py::init<vector<double> &, int, int, triangle>());

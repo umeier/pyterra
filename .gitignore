@@ -6,5 +6,5 @@ cmake-build-debug/
 *.eps
 *.dem
 build/
-testBin/
-
+*.so
+*.egg-info

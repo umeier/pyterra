@@ -161,7 +161,7 @@ boolean Subdivision::isInterior(Edge *e)
 //
 // Tests whether e is an interior edge.
 // 
-// WARNING: This topological test will not work if the boundary is
+// WARNING: This topological tests will not work if the boundary is
 //          a triangle.  This is not a problem here; the boundary is
 //          always a rectangle.  But if you try to adapt this code, please
 //          keep this in mind.
