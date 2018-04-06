@@ -19,7 +19,6 @@ Map *DEM;
 
 
 class PyTerra {
-    calculated_tin calc_result;
 
 public:
     PyTerra(vector<double> &data, int width, int height);
@@ -65,6 +64,7 @@ void PyTerra::do_insertion() {
 }
 
 vector<triangle3d> PyTerra::get_result() {
+    calculated_tin calc_result;
     vector<Triangle *> triangles = mesh->getTriangles();
     for (auto it = triangles.begin(); it != triangles.end(); it++) {
         Triangle T = **it;
@@ -75,6 +75,7 @@ vector<triangle3d> PyTerra::get_result() {
         point3d P2 = point3d(p2[X], p2[Y], DEM->eval(p2[X], p2[Y]));
         point3d P3 = point3d(p3[X], p3[Y], DEM->eval(p3[X], p3[Y]));
         triangle3d tri = triangle3d(P1, P2, P3);
+        calc_result.push_back(tri);
     }
     return calc_result;
 }
