@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/umeier/pyterra.svg?branch=master)](https://travis-ci.org/umeier/pyterra)
+
 # Terra Height Field Simplification Software
 
 This software is based on the `terra`-Software by Michael Garland. I found the sources on 
