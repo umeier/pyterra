@@ -21,7 +21,7 @@ pybind11_add_module(pyterra ${SOURCES} ${SOURCE_DIR}/terra.cpp)
 
 SET(TEST_DIR "tests")
 SET(TESTS ${SOURCES} "${TEST_DIR}/test_main.cpp" "${TEST_DIR}/test_terra.cpp")
-include_directories(lib/catch)
+include_directories(lib/catch/single_include)
 add_executable("${PROJECT_NAME}_test" ${TESTS})
 
 
