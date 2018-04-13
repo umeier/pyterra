@@ -1,5 +1,5 @@
 #include <cmath>
-
+#include <utility>
 #include "Geom.h"
 #include "Map.h"
 
@@ -20,7 +20,7 @@ void Map::findLimits() {
 Map *readDouble(vector<double> values, int width, int height) {
     Map *map;
     map = new DoubleMap(width, height);
-    map->doubleRead(values);
+    map->doubleRead(std::move(values));
     map->findLimits();
     return map;
 }

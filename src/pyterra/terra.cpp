@@ -12,18 +12,18 @@ using namespace pybind11::literals;
 typedef std::tuple<int, int> point;
 typedef std::tuple<point, point, point> triangle;
 
-Mesh *mesh;
-double error_threshold = 0.0;
-int point_limit = -1;
-Map *DEM;
-
 
 class PyTerra {
+
+    Mesh *mesh = nullptr;
+    Map *DEM = nullptr;
 
 public:
     PyTerra(vector<double> &data, int width, int height);
 
     PyTerra(vector<double> &data, int width, int height, triangle tri);
+
+    ~PyTerra();
 
     void setPointLimit(int);
 
@@ -31,7 +31,13 @@ public:
 
     void do_insertion();
 
+    int getPointCount();
+
+    double getError();
+
     vector<triangle3d> get_result();
+
+    vector<point3d> get_points();
 
 };
 
@@ -52,22 +58,22 @@ PyTerra::PyTerra(vector<double> &data, int width, int height, triangle tri) {
 }
 
 void PyTerra::setPointLimit(int limit) {
-    point_limit = limit;
+    mesh->setPointLimit(limit);
 }
 
 void PyTerra::setErrorThreshold(double threshold) {
-    error_threshold = threshold;
+    mesh->setErrorThreshold(threshold);
 }
 
 void PyTerra::do_insertion() {
-    greedy_insertion();
+    mesh->greedy_insertion();
 }
 
 vector<triangle3d> PyTerra::get_result() {
     calculated_tin calc_result;
     vector<Triangle *> triangles = mesh->getTriangles();
-    for (auto it = triangles.begin(); it != triangles.end(); it++) {
-        Triangle T = **it;
+    for (auto &triangle : triangles) {
+        Triangle T = *triangle;
         const Vertex p1 = T.point1();
         const Vertex p2 = T.point2();
         const Vertex p3 = T.point3();
@@ -80,14 +86,45 @@ vector<triangle3d> PyTerra::get_result() {
     return calc_result;
 }
 
+double PyTerra::getError() {
+    return mesh->maxError();
+}
+
+int PyTerra::getPointCount() {
+    return mesh->pointCount();
+}
+
+vector<point3d> PyTerra::get_points() {
+    vector<point3d> result;
+    int width = DEM->width;
+    int height = DEM->height;
+    for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+            if (mesh->is_used(x, y) == DATA_POINT_USED) {
+                point3d p = point3d(x, y, DEM->eval(x, y));
+                result.push_back(p);
+            }
+        }
+    }
+    return result;
+}
+
+PyTerra::~PyTerra() {
+    DEM = nullptr;
+    mesh = nullptr;
+}
+
 
 PYBIND11_MODULE(pyterra, m) {
     m.doc() = "pyterra tin rendering plugin";
-    py::class_<PyTerra> pyterra(m, "PyTerra");
-    pyterra.def(py::init<vector<double> &, int, int>());
-    pyterra.def(py::init<vector<double> &, int, int, triangle>());
-    pyterra.def("set_point_limit", &PyTerra::setPointLimit);
-    pyterra.def("set_error_threshold", &PyTerra::setErrorThreshold);
-    pyterra.def("do_insertion", &PyTerra::do_insertion);
-    pyterra.def("get_result", &PyTerra::get_result);
+    py::class_<PyTerra>(m, "PyTerra")
+    .def(py::init<vector<double> &, int, int>())
+    .def(py::init<vector<double> &, int, int, triangle>())
+    .def("set_point_limit", &PyTerra::setPointLimit)
+    .def("set_error_threshold", &PyTerra::setErrorThreshold)
+    .def("do_insertion", &PyTerra::do_insertion)
+    .def("get_result", &PyTerra::get_result)
+    .def("get_error", &PyTerra::getError)
+    .def("get_point_count", &PyTerra::getPointCount)
+    .def("get_points", &PyTerra::get_points);
 }

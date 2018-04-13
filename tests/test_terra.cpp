@@ -6,8 +6,6 @@
 #include "terra.h"
 
 Mesh *mesh;
-double error_threshold = 0.0;
-int point_limit = -1;
 Map *DEM;
 
 using namespace std;
@@ -27,7 +25,7 @@ TEST_CASE("double_test") {
     REQUIRE(DEM->eval(3, 1) == 8.0);
     REQUIRE(DEM->eval(3, 0) == 4.0);
     REQUIRE(DEM->eval(0, 1) == 5.0);
-    greedy_insertion();
+    mesh->greedy_insertion();
 }
 
 TEST_CASE("triangle_test") {
@@ -43,5 +41,5 @@ TEST_CASE("triangle_test") {
     REQUIRE(mesh->is_used(3, 1) == 0);
     REQUIRE(DEM->min == 1.0);
     REQUIRE(DEM->max == 12.0);
-    greedy_insertion();
+    mesh->greedy_insertion();
 }

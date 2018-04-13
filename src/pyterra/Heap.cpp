@@ -47,7 +47,7 @@ void Heap::insert(Labelled *t,double v)
 {
     if( size == maxLength() )
     {
-	cerr << "NOTE: Growing heap from " << size << " to " << 2*size << endl;
+	// cerr << "NOTE: Growing heap from " << size << " to " << 2*size << endl;
 	resize(2*size);
     }
 
@@ -67,12 +67,12 @@ void Heap::update(Labelled *t,double v)
 
     if( i >= size )
     {
-	cerr << "WARNING: Attempting to update past end of heap!" << endl;
+	    cerr << "WARNING: Attempting to update past end of heap!" << endl;
 	return;
     }
     else if( i == NOT_IN_HEAP )
     {
-	cerr << "WARNING: Attempting to update object not in heap!" << endl;
+	    cerr << "WARNING: Attempting to update object not in heap!" << endl;
 	return;
     }
 

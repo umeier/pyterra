@@ -62,6 +62,9 @@ class Mesh : public Subdivision {
     unsigned int count;
     ImportMask *MASK;
 
+    double error_threshold = 0.0;
+    int point_limit = -1;
+
 protected:
 
     Map *H;
@@ -74,7 +77,15 @@ protected:
                             int y, double x1, double x2,
                             Candidate &candidate);
 
+    inline int goal_not_met() {
+        return this->maxError() > error_threshold &&
+               this->pointCount() < point_limit;
+    }
+
 public:
+
+    void greedy_insertion();
+
     explicit Mesh(Map *map);
     Mesh(Map *map, const Vertex &, const Vertex &, const Vertex &);
 
@@ -91,6 +102,14 @@ public:
     double maxError();
 
     double eval(int x, int y);
+
+    void setPointLimit(int pointlimit) {
+        this->point_limit = pointlimit;
+    }
+
+    void setErrorThreshold(double errorthreshold) {
+        this->error_threshold = errorthreshold;
+    }
 
     tin_triangles getTriangles();
 };

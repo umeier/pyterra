@@ -257,3 +257,11 @@ tin_triangles Mesh::getTriangles() {
     }
     return triangles;
 }
+
+void Mesh::greedy_insertion() {
+    while (this->goal_not_met()) {
+        if (not this->greedyInsert())
+            break;
+    }
+
+}

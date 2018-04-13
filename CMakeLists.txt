@@ -13,7 +13,6 @@ set(SOURCES
         "${SOURCE_DIR}/Mask.cpp"
         "${SOURCE_DIR}/GreedyInsert.cpp"
         "${SOURCE_DIR}/Heap.cpp"
-        "${SOURCE_DIR}/greedy.cpp"
         )
 
 add_subdirectory(lib/pybind11)
