@@ -12,6 +12,9 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-6
+            - libgdal-dev
+            - libproj-dev
+            - libgeos-dev
       env:
         - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
 
@@ -22,4 +25,4 @@ install:
   - pip install -r requirements-dev.txt
 
 script:
-        - python setup.py test
+  - python setup.py test
